@@ -1,1 +1,57 @@
-# social
+# Social Tracker
+
+Una aplicación web simple para rastrear y analizar interacciones sociales.
+
+## 🎯 Descripción
+
+Social Tracker es una herramienta personal para registrar tus interacciones sociales y analizar patrones que te ayuden a mejorar tu vida social. Registra detalles como el lugar, las personas, tu outfit, y el nivel de satisfacción de cada interacción.
+
+## ✨ Características
+
+- **👤 Dos usuarios**: Dani y Edu
+- **📝 Registro de interacciones**: Fecha, lugar, personas, ropa, tipo de interacción, satisfacción (1-5 estrellas), y notas
+- **📅 Vista de calendario**: Visualiza tus interacciones por fecha
+- **📋 Lista completa**: Revisa todas tus interacciones ordenadas por fecha
+- **📈 Estadísticas y gráficas**:
+  - Total de interacciones
+  - Satisfacción promedio
+  - Lugares únicos visitados
+  - Personas conocidas
+  - Gráficas por lugar
+  - Gráficas por tipo de ropa
+- **💾 Firebase Firestore**: Almacenamiento en la nube
+
+## 🚀 Uso
+
+1. Visita la aplicación en GitHub Pages: [https://edurobrus.github.io/social/](https://edurobrus.github.io/social/)
+2. Selecciona tu usuario (Dani o Edu)
+3. Comienza a registrar tus interacciones
+4. Revisa el calendario, lista y estadísticas para analizar tus patrones sociales
+
+## 🛠️ Tecnologías
+
+- HTML5
+- CSS3
+- JavaScript (ES6+)
+- Firebase Firestore
+
+## 📦 Instalación local
+
+```bash
+git clone https://github.com/edurobrus/social.git
+cd social
+# Abre index.html en tu navegador
+```
+
+## 🎨 Objetivo
+
+El objetivo es ayudarte a:
+- Identificar qué lugares generan mejores interacciones
+- Descubrir patrones de vestimenta exitosos
+- Rastrear la evolución de tus habilidades sociales
+- Maximizar interacciones positivas
+- Mejorar continuamente tus interacciones sociales
+
+## 📄 Licencia
+
+Proyecto personal de código abierto
