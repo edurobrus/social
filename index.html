@@ -534,13 +534,15 @@
         let allInteractions = [];
 
         // Login
-        window.login = function(username) {
+        window.login = async function(username) {
             currentUser = username;
             document.getElementById('currentUser').textContent = username;
             document.getElementById('loginScreen').classList.add('hidden');
             document.getElementById('appScreen').classList.remove('hidden');
             document.getElementById('date').valueAsDate = new Date();
-            loadInteractions();
+            await loadInteractions();
+            // Refresh current view
+            updateCurrentView();
         };
 
         // Logout
@@ -603,7 +605,8 @@
                 await addDoc(collection(db, 'interactions'), interaction);
                 alert('¡Interacción guardada con éxito! ✅');
                 resetForm();
-                loadInteractions();
+                await loadInteractions();
+                updateCurrentView();
             } catch (error) {
                 console.error('Error:', error);
                 alert('Error al guardar la interacción: ' + error.message);
@@ -640,8 +643,26 @@
                     if (a.date < b.date) return 1;
                     return 0;
                 });
+
+                console.log(`Loaded ${allInteractions.length} interactions for ${currentUser}`);
             } catch (error) {
                 console.error('Error loading interactions:', error);
+                alert('Error al cargar interacciones: ' + error.message + '\n\nPor favor, verifica las reglas de Firestore.');
+            }
+        }
+
+        // Update current view after data changes
+        function updateCurrentView() {
+            const activeTab = document.querySelector('.tab-content.active');
+            if (!activeTab) return;
+
+            const tabId = activeTab.id;
+            if (tabId === 'calendarTab') {
+                renderCalendar();
+            } else if (tabId === 'listTab') {
+                renderInteractionList();
+            } else if (tabId === 'statsTab') {
+                renderStats();
             }
         }
 
