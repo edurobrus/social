@@ -1,4 +1,4 @@
-# Social Tracker
+# Social Tracke
 
 Una aplicación web simple para rastrear y analizar interacciones sociales.
 
