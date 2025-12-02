@@ -43,6 +43,24 @@ cd social
 # Abre index.html en tu navegador
 ```
 
+## 🚀 Despliegue
+
+### Despliegue Automático con GitHub Actions
+
+El proyecto incluye un workflow de GitHub Actions que despliega automáticamente a GitHub Pages:
+
+- **Automático**: Cada push a la rama `main` despliega automáticamente
+- **Manual**: También puedes ejecutar el workflow manualmente desde la pestaña "Actions" en GitHub
+
+### Configuración inicial de GitHub Pages:
+
+1. Ve a tu repositorio en GitHub
+2. Click en **Settings** > **Pages**
+3. En **Source**, selecciona **GitHub Actions**
+4. El workflow se ejecutará automáticamente en el próximo push
+
+La aplicación estará disponible en: `https://edurobrus.github.io/social/`
+
 ## 🎨 Objetivo
 
 El objetivo es ayudarte a:
