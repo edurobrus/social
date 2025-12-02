@@ -741,12 +741,18 @@
                 </div>
 
                 <div id="listTab" class="tab-content">
-                    <h2>Todas tus Interacciones</h2>
+                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
+                        <h2>Todas tus Interacciones</h2>
+                        <button class="btn" onclick="downloadCSV()" style="padding: 10px 20px; font-size: 0.9em;">📥 Descargar CSV</button>
+                    </div>
                     <div class="interaction-list" id="interactionList"></div>
                 </div>
 
                 <div id="statsTab" class="tab-content">
-                    <h2>Tus Estadísticas</h2>
+                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
+                        <h2>Tus Estadísticas</h2>
+                        <button class="btn" onclick="downloadCSV()" style="padding: 10px 20px; font-size: 0.9em;">📥 Descargar CSV</button>
+                    </div>
                     <div class="stats-grid" id="statsGrid"></div>
                     <div class="chart-container">
                         <h3>Promedio de Dimensiones por Tipo de Interacción</h3>
@@ -1291,6 +1297,95 @@
         function formatDate(dateStr) {
             const date = new Date(dateStr + 'T00:00:00');
             return date.toLocaleDateString('es-ES', { year: 'numeric', month: 'long', day: 'numeric' });
+        }
+
+        // Download CSV function
+        window.downloadCSV = function() {
+            if (allInteractions.length === 0) {
+                alert('No hay datos para exportar');
+                return;
+            }
+
+            // Define CSV headers
+            const headers = [
+                'Usuario',
+                'Fecha',
+                'Duración (min)',
+                'Lugar',
+                'Personas',
+                'Outfit',
+                'Tipo de Interacción',
+                'Objetivo',
+                'Objetivo Cumplido',
+                'Mood Antes',
+                'Mood Después',
+                'Conexión (1-10)',
+                'Autenticidad (1-10)',
+                'Energía (1-10)',
+                'Reciprocidad (1-10)',
+                'Score General',
+                'Qué Funcionó',
+                'Qué Mejorar',
+                'Notas',
+                'Timestamp'
+            ];
+
+            // Convert data to CSV format
+            let csv = headers.join(',') + '\n';
+
+            allInteractions.forEach(interaction => {
+                const overallScore = interaction.overallScore ||
+                    ((interaction.connection + interaction.authenticity + interaction.energy + interaction.reciprocity) / 4);
+
+                const row = [
+                    escapeCSV(interaction.user || ''),
+                    escapeCSV(interaction.date || ''),
+                    interaction.duration || '',
+                    escapeCSV(interaction.place || ''),
+                    escapeCSV(interaction.people || ''),
+                    escapeCSV(interaction.outfit || ''),
+                    escapeCSV(interaction.interactionType || ''),
+                    escapeCSV(interaction.goal || ''),
+                    escapeCSV(interaction.goalAchieved || ''),
+                    escapeCSV(interaction.moodBefore || ''),
+                    escapeCSV(interaction.moodAfter || ''),
+                    interaction.connection || '',
+                    interaction.authenticity || '',
+                    interaction.energy || '',
+                    interaction.reciprocity || '',
+                    overallScore.toFixed(2),
+                    escapeCSV(interaction.whatWorked || ''),
+                    escapeCSV(interaction.whatToImprove || ''),
+                    escapeCSV(interaction.notes || ''),
+                    escapeCSV(interaction.timestamp || '')
+                ];
+
+                csv += row.join(',') + '\n';
+            });
+
+            // Create blob and download
+            const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
+            const link = document.createElement('a');
+            const url = URL.createObjectURL(blob);
+
+            const fileName = `social-tracker-${currentUser}-${new Date().toISOString().split('T')[0]}.csv`;
+
+            link.setAttribute('href', url);
+            link.setAttribute('download', fileName);
+            link.style.visibility = 'hidden';
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+        };
+
+        // Helper function to escape CSV fields
+        function escapeCSV(str) {
+            if (str === null || str === undefined) return '';
+            str = String(str);
+            if (str.includes(',') || str.includes('"') || str.includes('\n')) {
+                return '"' + str.replace(/"/g, '""') + '"';
+            }
+            return str;
         }
     </script>
 </body>
