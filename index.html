@@ -625,14 +625,20 @@
             try {
                 const q = query(
                     collection(db, 'interactions'),
-                    where('user', '==', currentUser),
-                    orderBy('date', 'desc')
+                    where('user', '==', currentUser)
                 );
 
                 const querySnapshot = await getDocs(q);
                 allInteractions = [];
                 querySnapshot.forEach((doc) => {
                     allInteractions.push({ id: doc.id, ...doc.data() });
+                });
+
+                // Sort by date in descending order on the client side
+                allInteractions.sort((a, b) => {
+                    if (a.date > b.date) return -1;
+                    if (a.date < b.date) return 1;
+                    return 0;
                 });
             } catch (error) {
                 console.error('Error loading interactions:', error);
