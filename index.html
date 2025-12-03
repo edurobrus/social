@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Social Tracker - Dani & Edu</title>
+    <title>Social Graph Analyzer - Network Optimization</title>
     <style>
         * {
             margin: 0;
@@ -13,22 +13,22 @@
 
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%);
             min-height: 100vh;
             padding: 20px;
         }
 
         .container {
-            max-width: 1200px;
+            max-width: 1400px;
             margin: 0 auto;
             background: white;
             border-radius: 15px;
-            box-shadow: 0 10px 40px rgba(0,0,0,0.2);
+            box-shadow: 0 10px 40px rgba(0,0,0,0.3);
             overflow: hidden;
         }
 
         .header {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%);
             color: white;
             padding: 30px;
             text-align: center;
@@ -58,7 +58,7 @@
 
         .logout-btn:hover {
             background: white;
-            color: #667eea;
+            color: #1e3c72;
         }
 
         .login-screen {
@@ -80,7 +80,7 @@
         }
 
         .user-card {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%);
             color: white;
             padding: 40px 60px;
             border-radius: 15px;
@@ -101,31 +101,31 @@
 
         .nav-tabs {
             display: flex;
-            gap: 10px;
+            gap: 5px;
             margin-bottom: 30px;
             border-bottom: 2px solid #eee;
             flex-wrap: wrap;
         }
 
         .tab {
-            padding: 15px 25px;
+            padding: 12px 20px;
             background: none;
             border: none;
             cursor: pointer;
-            font-size: 1em;
+            font-size: 0.95em;
             color: #666;
             border-bottom: 3px solid transparent;
             transition: all 0.3s;
         }
 
         .tab.active {
-            color: #667eea;
-            border-bottom-color: #667eea;
+            color: #1e3c72;
+            border-bottom-color: #1e3c72;
             font-weight: bold;
         }
 
         .tab:hover {
-            color: #667eea;
+            color: #1e3c72;
         }
 
         .tab-content {
@@ -134,6 +134,32 @@
 
         .tab-content.active {
             display: block;
+        }
+
+        .btn {
+            background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%);
+            color: white;
+            border: none;
+            padding: 12px 30px;
+            border-radius: 8px;
+            font-size: 1em;
+            cursor: pointer;
+            transition: transform 0.2s;
+            font-weight: bold;
+        }
+
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+        }
+
+        .btn-small {
+            padding: 8px 15px;
+            font-size: 0.85em;
+        }
+
+        .btn-danger {
+            background: linear-gradient(135deg, #c0392b 0%, #e74c3c 100%);
         }
 
         .form-group {
@@ -151,7 +177,7 @@
         .form-group textarea,
         .form-group select {
             width: 100%;
-            padding: 12px;
+            padding: 10px;
             border: 2px solid #ddd;
             border-radius: 8px;
             font-size: 1em;
@@ -162,12 +188,7 @@
         .form-group textarea:focus,
         .form-group select:focus {
             outline: none;
-            border-color: #667eea;
-        }
-
-        .form-group textarea {
-            resize: vertical;
-            min-height: 80px;
+            border-color: #1e3c72;
         }
 
         .form-row {
@@ -182,28 +203,173 @@
             }
         }
 
-        .dimension-rating {
+        .node-card {
             background: #f9f9f9;
-            padding: 15px;
+            border-left: 4px solid #1e3c72;
+            padding: 20px;
+            margin-bottom: 15px;
             border-radius: 8px;
+            transition: all 0.3s;
+            cursor: pointer;
+        }
+
+        .node-card:hover {
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+            transform: translateX(5px);
+        }
+
+        .node-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
             margin-bottom: 15px;
         }
 
-        .dimension-rating label {
-            display: block;
-            margin-bottom: 10px;
-            color: #333;
-            font-weight: 600;
+        .node-name {
+            font-size: 1.3em;
+            font-weight: bold;
+            color: #1e3c72;
         }
 
-        .slider-container {
+        .node-badges {
             display: flex;
+            gap: 5px;
+            flex-wrap: wrap;
+        }
+
+        .badge {
+            background: #1e3c72;
+            color: white;
+            padding: 4px 10px;
+            border-radius: 12px;
+            font-size: 0.8em;
+        }
+
+        .badge-romantic {
+            background: #e74c3c;
+        }
+
+        .badge-social {
+            background: #27ae60;
+        }
+
+        .badge-high {
+            background: #f39c12;
+        }
+
+        .kpi-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(100px, 1fr));
+            gap: 10px;
+            margin-top: 10px;
+        }
+
+        .kpi-item {
+            background: white;
+            padding: 10px;
+            border-radius: 5px;
+            text-align: center;
+        }
+
+        .kpi-label {
+            font-size: 0.75em;
+            color: #666;
+            margin-bottom: 5px;
+        }
+
+        .kpi-value {
+            font-size: 1.2em;
+            font-weight: bold;
+            color: #1e3c72;
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+
+        .stat-card {
+            background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%);
+            color: white;
+            padding: 20px;
+            border-radius: 10px;
+            text-align: center;
+        }
+
+        .stat-value {
+            font-size: 2em;
+            font-weight: bold;
+            margin: 10px 0;
+        }
+
+        .stat-label {
+            font-size: 0.9em;
+            opacity: 0.9;
+        }
+
+        .event-card {
+            background: #f9f9f9;
+            border-left: 4px solid #27ae60;
+            padding: 15px;
+            margin-bottom: 10px;
+            border-radius: 8px;
+        }
+
+        .event-header {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 10px;
+            font-weight: bold;
+        }
+
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0,0,0,0.5);
+        }
+
+        .modal-content {
+            background-color: white;
+            margin: 50px auto;
+            padding: 30px;
+            border-radius: 15px;
+            width: 90%;
+            max-width: 600px;
+            max-height: 85vh;
+            overflow-y: auto;
+        }
+
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
             align-items: center;
-            gap: 15px;
+            margin-bottom: 20px;
+        }
+
+        .close {
+            color: #aaa;
+            font-size: 28px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+
+        .close:hover {
+            color: #000;
+        }
+
+        .hidden {
+            display: none;
         }
 
         .slider {
-            flex: 1;
+            width: 100%;
             height: 8px;
             border-radius: 5px;
             background: #ddd;
@@ -217,7 +383,7 @@
             width: 20px;
             height: 20px;
             border-radius: 50%;
-            background: #667eea;
+            background: #1e3c72;
             cursor: pointer;
         }
 
@@ -225,315 +391,31 @@
             width: 20px;
             height: 20px;
             border-radius: 50%;
-            background: #667eea;
+            background: #1e3c72;
             cursor: pointer;
             border: none;
         }
 
-        .slider-value {
-            min-width: 40px;
-            text-align: center;
-            font-weight: bold;
-            color: #667eea;
-            font-size: 1.2em;
-        }
-
-        .emoji-selector {
-            display: flex;
-            gap: 10px;
-            flex-wrap: wrap;
-        }
-
-        .emoji-option {
-            font-size: 2em;
-            cursor: pointer;
-            padding: 10px;
-            border-radius: 8px;
-            transition: all 0.3s;
-            border: 2px solid transparent;
-        }
-
-        .emoji-option:hover {
-            background: #f0f0f0;
-        }
-
-        .emoji-option.selected {
-            background: #667eea;
-            border-color: #667eea;
-            transform: scale(1.1);
-        }
-
-        .btn {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            color: white;
-            border: none;
-            padding: 15px 40px;
-            border-radius: 8px;
-            font-size: 1.1em;
-            cursor: pointer;
-            transition: transform 0.2s;
-            font-weight: bold;
-        }
-
-        .btn:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
-        }
-
-        .calendar {
-            display: grid;
-            grid-template-columns: repeat(7, 1fr);
-            gap: 10px;
-            margin-top: 20px;
-        }
-
-        .calendar-header {
-            background: #667eea;
-            color: white;
-            padding: 10px;
-            text-align: center;
-            font-weight: bold;
+        .color-picker {
+            width: 60px;
+            height: 40px;
+            border: 2px solid #ddd;
             border-radius: 5px;
-        }
-
-        .calendar-day {
-            background: #f5f5f5;
-            padding: 15px;
-            border-radius: 5px;
-            text-align: center;
-            min-height: 80px;
             cursor: pointer;
-            transition: all 0.3s;
-            position: relative;
         }
 
-        .calendar-day:hover {
-            background: #e0e0e0;
-        }
-
-        .calendar-day.has-interaction {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            color: white;
-        }
-
-        .calendar-day .date {
-            font-weight: bold;
-            margin-bottom: 5px;
-        }
-
-        .calendar-day .count {
-            font-size: 0.8em;
-            opacity: 0.8;
-        }
-
-        .interaction-list {
-            margin-top: 20px;
-        }
-
-        .interaction-card {
+        .network-viz {
             background: #f9f9f9;
-            border-left: 4px solid #667eea;
-            padding: 20px;
-            margin-bottom: 15px;
-            border-radius: 8px;
-            transition: all 0.3s;
-        }
-
-        .interaction-card:hover {
-            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
-            transform: translateX(5px);
-        }
-
-        .interaction-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 10px;
-            flex-wrap: wrap;
-            gap: 10px;
-        }
-
-        .interaction-date {
-            font-weight: bold;
-            color: #667eea;
-        }
-
-        .interaction-badges {
-            display: flex;
-            gap: 10px;
-            flex-wrap: wrap;
-        }
-
-        .badge {
-            background: #667eea;
-            color: white;
-            padding: 5px 10px;
-            border-radius: 15px;
-            font-size: 0.85em;
-        }
-
-        .interaction-details {
-            color: #666;
-            line-height: 1.6;
-        }
-
-        .interaction-details strong {
-            color: #333;
-        }
-
-        .dimension-display {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
-            gap: 10px;
-            margin-top: 10px;
-        }
-
-        .dimension-item {
-            background: white;
-            padding: 10px;
-            border-radius: 5px;
-            text-align: center;
-        }
-
-        .dimension-label {
-            font-size: 0.85em;
-            color: #666;
-        }
-
-        .dimension-value {
-            font-size: 1.2em;
-            font-weight: bold;
-            color: #667eea;
-        }
-
-        .stats-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-            gap: 20px;
-            margin-bottom: 30px;
-        }
-
-        .stat-card {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            color: white;
-            padding: 25px;
             border-radius: 10px;
-            text-align: center;
-        }
-
-        .stat-value {
-            font-size: 2.5em;
-            font-weight: bold;
-            margin: 10px 0;
-        }
-
-        .stat-label {
-            font-size: 1em;
-            opacity: 0.9;
-        }
-
-        .chart-container {
-            background: #f9f9f9;
             padding: 20px;
-            border-radius: 10px;
-            margin-top: 20px;
-        }
-
-        .chart-container h3 {
-            color: #333;
-            margin-bottom: 15px;
-        }
-
-        .bar-chart {
-            display: flex;
-            align-items: flex-end;
-            gap: 10px;
-            height: 300px;
-            padding: 20px;
-        }
-
-        .bar {
-            flex: 1;
-            background: linear-gradient(to top, #667eea 0%, #764ba2 100%);
-            border-radius: 5px 5px 0 0;
-            position: relative;
-            transition: all 0.3s;
-            min-height: 20px;
-        }
-
-        .bar:hover {
-            opacity: 0.8;
-        }
-
-        .bar-label {
-            position: absolute;
-            bottom: -30px;
-            left: 0;
-            right: 0;
+            min-height: 400px;
             text-align: center;
-            font-size: 0.9em;
-            color: #666;
-        }
-
-        .bar-value {
-            position: absolute;
-            top: -25px;
-            left: 0;
-            right: 0;
-            text-align: center;
-            font-weight: bold;
-            color: #667eea;
-        }
-
-        .insight-card {
-            background: #fff3cd;
-            border-left: 4px solid #ffc107;
-            padding: 15px;
-            border-radius: 5px;
-            margin-bottom: 15px;
-        }
-
-        .insight-card h4 {
-            color: #856404;
-            margin-bottom: 5px;
-        }
-
-        .insight-card p {
-            color: #856404;
-        }
-
-        .hidden {
-            display: none;
-        }
-
-        .month-selector {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 20px;
-            background: #f5f5f5;
-            padding: 15px;
-            border-radius: 8px;
-        }
-
-        .month-selector button {
-            background: #667eea;
-            color: white;
-            border: none;
-            padding: 10px 20px;
-            border-radius: 5px;
-            cursor: pointer;
-            font-size: 1em;
-        }
-
-        .month-selector h3 {
-            color: #333;
         }
 
         .section-title {
-            color: #667eea;
-            font-size: 1.1em;
-            margin: 20px 0 10px 0;
+            color: #1e3c72;
+            font-size: 1.2em;
+            margin: 25px 0 15px 0;
             padding-bottom: 5px;
             border-bottom: 2px solid #eee;
         }
@@ -555,226 +437,239 @@
 
         <div id="appScreen" class="hidden">
             <div class="header">
-                <h1>📊 Social Tracker</h1>
-                <div class="user-info">Hola, <span id="currentUser"></span>!</div>
+                <h1>🕸️ Social Graph Analyzer</h1>
+                <div class="user-info">User: <span id="currentUser"></span></div>
                 <button class="logout-btn" onclick="logout()">Cerrar Sesión</button>
             </div>
 
             <div class="main-content">
                 <div class="nav-tabs">
-                    <button class="tab active" onclick="showTab('register')">➕ Registrar</button>
-                    <button class="tab" onclick="showTab('calendar')">📅 Calendario</button>
-                    <button class="tab" onclick="showTab('list')">📋 Lista</button>
-                    <button class="tab" onclick="showTab('stats')">📈 Estadísticas</button>
-                    <button class="tab" onclick="showTab('insights')">💡 Insights</button>
+                    <button class="tab active" onclick="showTab('nodes')">👥 Nodos</button>
+                    <button class="tab" onclick="showTab('events')">📅 Eventos</button>
+                    <button class="tab" onclick="showTab('network')">🕸️ Red</button>
+                    <button class="tab" onclick="showTab('analytics')">📊 Analytics</button>
+                    <button class="tab" onclick="showTab('spawn')">🎯 High-Value Zones</button>
+                    <button class="tab" onclick="showTab('profile')">⚙️ Mi Perfil</button>
                 </div>
 
-                <div id="registerTab" class="tab-content active">
-                    <h2>Registrar Nueva Interacción</h2>
-                    <form id="interactionForm" onsubmit="saveInteraction(event)">
-                        <div class="section-title">📅 Información Básica</div>
-
-                        <div class="form-row">
-                            <div class="form-group">
-                                <label>Fecha:</label>
-                                <input type="date" id="date" required>
-                            </div>
-                            <div class="form-group">
-                                <label>Duración (minutos):</label>
-                                <input type="number" id="duration" placeholder="30" min="1" required>
-                            </div>
-                        </div>
-
-                        <div class="form-row">
-                            <div class="form-group">
-                                <label>Lugar:</label>
-                                <input type="text" id="place" placeholder="Ej: Bar Central, Universidad..." required>
-                            </div>
-                            <div class="form-group">
-                                <label>Tipo de interacción:</label>
-                                <select id="interactionType" required>
-                                    <option value="">Selecciona...</option>
-                                    <option value="casual">Casual</option>
-                                    <option value="social">Social/Fiesta</option>
-                                    <option value="trabajo">Trabajo/Estudio</option>
-                                    <option value="deportivo">Deportivo</option>
-                                    <option value="cultural">Cultural</option>
-                                    <option value="cita">Cita romántica</option>
-                                    <option value="otro">Otro</option>
-                                </select>
-                            </div>
-                        </div>
-
-                        <div class="form-group">
-                            <label>Personas (separadas por comas):</label>
-                            <input type="text" id="people" placeholder="Ej: Ana, Carlos, María..." required>
-                        </div>
-
-                        <div class="form-group">
-                            <label>Ropa que llevabas:</label>
-                            <input type="text" id="outfit" placeholder="Ej: Camisa azul, jeans..." required>
-                        </div>
-
-                        <div class="section-title">🎯 Objetivos y Resultados</div>
-
-                        <div class="form-group">
-                            <label>¿Cuál era tu objetivo en esta interacción?</label>
-                            <select id="goal">
-                                <option value="">Selecciona...</option>
-                                <option value="conectar">Conectar más profundamente</option>
-                                <option value="divertirse">Divertirse y pasarlo bien</option>
-                                <option value="networking">Networking profesional</option>
-                                <option value="apoyo">Dar o recibir apoyo emocional</option>
-                                <option value="conocer">Conocer gente nueva</option>
-                                <option value="mantener">Mantener la relación</option>
-                                <option value="otro">Otro</option>
-                            </select>
-                        </div>
-
-                        <div class="form-group">
-                            <label>¿Se cumplió tu objetivo?</label>
-                            <select id="goalAchieved">
-                                <option value="">Selecciona...</option>
-                                <option value="si">Sí, completamente</option>
-                                <option value="parcial">Parcialmente</option>
-                                <option value="no">No realmente</option>
-                            </select>
-                        </div>
-
-                        <div class="section-title">😊 Estado Emocional</div>
-
-                        <div class="form-group">
-                            <label>¿Cómo te sentías ANTES de la interacción?</label>
-                            <div class="emoji-selector" id="moodBeforeSelector">
-                                <span class="emoji-option" data-mood="very-bad" onclick="setMoodBefore('very-bad')">😔</span>
-                                <span class="emoji-option" data-mood="bad" onclick="setMoodBefore('bad')">😕</span>
-                                <span class="emoji-option" data-mood="neutral" onclick="setMoodBefore('neutral')">😐</span>
-                                <span class="emoji-option" data-mood="good" onclick="setMoodBefore('good')">🙂</span>
-                                <span class="emoji-option" data-mood="very-good" onclick="setMoodBefore('very-good')">😄</span>
-                            </div>
-                            <input type="hidden" id="moodBefore" required>
-                        </div>
-
-                        <div class="form-group">
-                            <label>¿Cómo te sentiste DESPUÉS de la interacción?</label>
-                            <div class="emoji-selector" id="moodAfterSelector">
-                                <span class="emoji-option" data-mood="very-bad" onclick="setMoodAfter('very-bad')">😔</span>
-                                <span class="emoji-option" data-mood="bad" onclick="setMoodAfter('bad')">😕</span>
-                                <span class="emoji-option" data-mood="neutral" onclick="setMoodAfter('neutral')">😐</span>
-                                <span class="emoji-option" data-mood="good" onclick="setMoodAfter('good')">🙂</span>
-                                <span class="emoji-option" data-mood="very-good" onclick="setMoodAfter('very-good')">😄</span>
-                            </div>
-                            <input type="hidden" id="moodAfter" required>
-                        </div>
-
-                        <div class="section-title">📊 Dimensiones de Calidad (basado en investigación CDCS)</div>
-
-                        <div class="dimension-rating">
-                            <label>Conexión / Shared Reality (¿Sentiste que estabais en la misma onda?)</label>
-                            <div class="slider-container">
-                                <span>1</span>
-                                <input type="range" class="slider" id="connection" min="1" max="10" value="5" oninput="updateSliderValue('connection')">
-                                <span>10</span>
-                                <div class="slider-value" id="connectionValue">5</div>
-                            </div>
-                        </div>
-
-                        <div class="dimension-rating">
-                            <label>Autenticidad (¿Pudiste ser tú mismo/a?)</label>
-                            <div class="slider-container">
-                                <span>1</span>
-                                <input type="range" class="slider" id="authenticity" min="1" max="10" value="5" oninput="updateSliderValue('authenticity')">
-                                <span>10</span>
-                                <div class="slider-value" id="authenticityValue">5</div>
-                            </div>
-                        </div>
-
-                        <div class="dimension-rating">
-                            <label>Energía Social (¿Te sentiste energizado o agotado?)</label>
-                            <div class="slider-container">
-                                <span>1 (Agotado)</span>
-                                <input type="range" class="slider" id="energy" min="1" max="10" value="5" oninput="updateSliderValue('energy')">
-                                <span>10 (Energizado)</span>
-                                <div class="slider-value" id="energyValue">5</div>
-                            </div>
-                        </div>
-
-                        <div class="dimension-rating">
-                            <label>Reciprocidad (¿Sintieron interés mutuo?)</label>
-                            <div class="slider-container">
-                                <span>1</span>
-                                <input type="range" class="slider" id="reciprocity" min="1" max="10" value="5" oninput="updateSliderValue('reciprocity')">
-                                <span>10</span>
-                                <div class="slider-value" id="reciprocityValue">5</div>
-                            </div>
-                        </div>
-
-                        <div class="section-title">📝 Reflexión</div>
-
-                        <div class="form-group">
-                            <label>¿Qué funcionó bien?</label>
-                            <textarea id="whatWorked" placeholder="Ej: Hice preguntas abiertas, escuché activamente..."></textarea>
-                        </div>
-
-                        <div class="form-group">
-                            <label>¿Qué podrías mejorar?</label>
-                            <textarea id="whatToImprove" placeholder="Ej: Podría haber compartido más sobre mí..."></textarea>
-                        </div>
-
-                        <div class="form-group">
-                            <label>Notas adicionales:</label>
-                            <textarea id="notes" placeholder="Cualquier otra observación..."></textarea>
-                        </div>
-
-                        <button type="submit" class="btn">💾 Guardar Interacción</button>
-                    </form>
-                </div>
-
-                <div id="calendarTab" class="tab-content">
-                    <h2>Calendario de Interacciones</h2>
-                    <div class="month-selector">
-                        <button onclick="changeMonth(-1)">◀ Anterior</button>
-                        <h3 id="currentMonth"></h3>
-                        <button onclick="changeMonth(1)">Siguiente ▶</button>
-                    </div>
-                    <div class="calendar" id="calendar"></div>
-                </div>
-
-                <div id="listTab" class="tab-content">
+                <div id="nodesTab" class="tab-content active">
                     <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
-                        <h2>Todas tus Interacciones</h2>
-                        <button class="btn" onclick="downloadCSV()" style="padding: 10px 20px; font-size: 0.9em;">📥 Descargar CSV</button>
+                        <h2>Gestión de Nodos (Personas)</h2>
+                        <button class="btn" onclick="openNodeModal()">➕ Nuevo Nodo</button>
                     </div>
-                    <div class="interaction-list" id="interactionList"></div>
+                    <div id="nodesList"></div>
                 </div>
 
-                <div id="statsTab" class="tab-content">
+                <div id="eventsTab" class="tab-content">
                     <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
-                        <h2>Tus Estadísticas</h2>
-                        <button class="btn" onclick="downloadCSV()" style="padding: 10px 20px; font-size: 0.9em;">📥 Descargar CSV</button>
+                        <h2>Event Logs</h2>
+                        <button class="btn" onclick="openEventModal()">➕ Nuevo Evento</button>
                     </div>
-                    <div class="stats-grid" id="statsGrid"></div>
-                    <div class="chart-container">
-                        <h3>Promedio de Dimensiones por Tipo de Interacción</h3>
-                        <div class="bar-chart" id="dimensionsByType"></div>
-                    </div>
-                    <div class="chart-container">
-                        <h3>Satisfacción Promedio por Lugar</h3>
-                        <div class="bar-chart" id="placeChart"></div>
+                    <div id="eventsList"></div>
+                </div>
+
+                <div id="networkTab" class="tab-content">
+                    <h2>Visualización de Red Social</h2>
+                    <div class="network-viz" id="networkViz">
+                        <p style="color: #666;">Cargando visualización de red...</p>
                     </div>
                 </div>
 
-                <div id="insightsTab" class="tab-content">
-                    <h2>💡 Insights y Patrones</h2>
-                    <div id="insightsList"></div>
+                <div id="analyticsTab" class="tab-content">
+                    <h2>Analytics & KPIs</h2>
+                    <div class="stats-grid" id="analyticsGrid"></div>
+                    <div class="section-title">Top Nodes por Categoría</div>
+                    <div id="topNodes"></div>
+                </div>
+
+                <div id="spawnTab" class="tab-content">
+                    <h2>🎯 High-Value Node Spawn Analysis</h2>
+                    <div id="spawnAnalysis"></div>
+                </div>
+
+                <div id="profileTab" class="tab-content">
+                    <h2>Mi Perfil (OwnData)</h2>
+                    <div id="profileData"></div>
                 </div>
             </div>
         </div>
     </div>
 
+    <!-- Node Modal -->
+    <div id="nodeModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>Gestionar Nodo</h2>
+                <span class="close" onclick="closeNodeModal()">&times;</span>
+            </div>
+            <form id="nodeForm" onsubmit="saveNode(event)">
+                <div class="form-group">
+                    <label>Nombre *</label>
+                    <input type="text" id="nodeName" required>
+                </div>
+
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>Edad</label>
+                        <input type="number" id="nodeAge" min="0">
+                    </div>
+                    <div class="form-group">
+                        <label>Color del Nodo</label>
+                        <input type="color" id="nodeColor" class="color-picker" value="#3498db">
+                    </div>
+                </div>
+
+                <div class="section-title">Atributos</div>
+
+                <div class="form-group">
+                    <label>Trabajo/Ocupación</label>
+                    <input type="text" id="nodeJob">
+                </div>
+
+                <div class="form-group">
+                    <label>Hobbies (separados por comas)</label>
+                    <input type="text" id="nodeHobbies" placeholder="Ej: Música, Deportes, Lectura">
+                </div>
+
+                <div class="form-group">
+                    <label>Objetivos a largo plazo</label>
+                    <textarea id="nodeLongTermGoals"></textarea>
+                </div>
+
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>¿Está enamorado/a?</label>
+                        <select id="nodeIsInLove">
+                            <option value="no">No</option>
+                            <option value="yes">Sí</option>
+                            <option value="unknown">Desconocido</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label>Tipo de relación cercana</label>
+                        <select id="nodeRelationType">
+                            <option value="">Selecciona...</option>
+                            <option value="amigo">Amigo</option>
+                            <option value="familia">Familia</option>
+                            <option value="pareja">Pareja</option>
+                            <option value="conocido">Conocido</option>
+                            <option value="profesional">Profesional</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="section-title">Heurísticas & KPIs (1-10)</div>
+
+                <div class="form-group">
+                    <label>Valor Romántico: <span id="romanticValueDisplay">5</span></label>
+                    <input type="range" class="slider" id="nodeRomanticValue" min="0" max="10" value="5" oninput="updateSlider('romanticValue')">
+                </div>
+
+                <div class="form-group">
+                    <label>Valor Social (networking): <span id="socialValueDisplay">5</span></label>
+                    <input type="range" class="slider" id="nodeSocialValue" min="0" max="10" value="5" oninput="updateSlider('socialValue')">
+                </div>
+
+                <div class="form-group">
+                    <label>Nivel de Confianza: <span id="trustLevelDisplay">5</span></label>
+                    <input type="range" class="slider" id="nodeTrustLevel" min="0" max="10" value="5" oninput="updateSlider('trustLevel')">
+                </div>
+
+                <div class="section-title">Lugares Predecibles</div>
+
+                <div class="form-group">
+                    <label>Lugares frecuentes (separados por comas)</label>
+                    <input type="text" id="nodePlaces" placeholder="Ej: Universidad, Bar Central, Gimnasio">
+                </div>
+
+                <div class="form-group">
+                    <label>Highlights / Notas importantes</label>
+                    <textarea id="nodeHighlights" placeholder="Cualquier información relevante sobre esta persona..."></textarea>
+                </div>
+
+                <button type="submit" class="btn">💾 Guardar Nodo</button>
+                <button type="button" class="btn btn-danger btn-small" onclick="deleteNode()" id="deleteNodeBtn" style="display:none; margin-left: 10px;">🗑️ Eliminar</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Event Modal -->
+    <div id="eventModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>Registrar Evento</h2>
+                <span class="close" onclick="closeEventModal()">&times;</span>
+            </div>
+            <form id="eventForm" onsubmit="saveEvent(event)">
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>Fecha *</label>
+                        <input type="date" id="eventDate" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Hora</label>
+                        <input type="time" id="eventTime">
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label>Nodos participantes *</label>
+                    <select id="eventNodes" multiple size="5" required style="height: 120px;">
+                    </select>
+                    <small style="color: #666;">Mantén Ctrl/Cmd para seleccionar múltiples</small>
+                </div>
+
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>Lugar *</label>
+                        <input type="text" id="eventPlace" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Clima</label>
+                        <select id="eventWeather">
+                            <option value="">Selecciona...</option>
+                            <option value="soleado">☀️ Soleado</option>
+                            <option value="nublado">☁️ Nublado</option>
+                            <option value="lluvioso">🌧️ Lluvioso</option>
+                            <option value="nevado">❄️ Nevado</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>Outfit</label>
+                        <input type="text" id="eventOutfit" placeholder="Ej: Camisa azul, jeans">
+                    </div>
+                    <div class="form-group">
+                        <label>Número de personas</label>
+                        <input type="number" id="eventPeopleCount" min="1">
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label>Situación/Objetivo</label>
+                    <input type="text" id="eventSituation" placeholder="Ej: Cena casual, Networking, Estudio">
+                </div>
+
+                <div class="form-group">
+                    <label>Ambiente/Environment</label>
+                    <textarea id="eventEnvironment" placeholder="Describe el ambiente, ruido, iluminación, etc."></textarea>
+                </div>
+
+                <div class="form-group">
+                    <label>Notas del evento</label>
+                    <textarea id="eventNotes"></textarea>
+                </div>
+
+                <button type="submit" class="btn">💾 Guardar Evento</button>
+            </form>
+        </div>
+    </div>
+
     <script type="module">
         import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js';
-        import { getFirestore, collection, addDoc, query, where, getDocs } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js';
+        import { getFirestore, collection, addDoc, query, where, getDocs, doc, updateDoc, deleteDoc } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js';
 
         const firebaseConfig = {
             apiKey: "AIzaSyAaPppC8tW7hCOxukO3BL9BZs4-LR5l5LQ",
@@ -789,17 +684,9 @@
         const db = getFirestore(app);
 
         let currentUser = null;
-        let currentMonth = new Date();
-        let allInteractions = [];
-
-        // Mood values mapping
-        const moodValues = {
-            'very-bad': 1,
-            'bad': 2,
-            'neutral': 3,
-            'good': 4,
-            'very-good': 5
-        };
+        let allNodes = [];
+        let allEvents = [];
+        let currentNodeId = null;
 
         // Login
         window.login = async function(username) {
@@ -807,18 +694,57 @@
             document.getElementById('currentUser').textContent = username;
             document.getElementById('loginScreen').classList.add('hidden');
             document.getElementById('appScreen').classList.remove('hidden');
-            document.getElementById('date').valueAsDate = new Date();
-            await loadInteractions();
-            updateCurrentView();
+            await loadData();
         };
 
         // Logout
         window.logout = function() {
             currentUser = null;
+            allNodes = [];
+            allEvents = [];
             document.getElementById('loginScreen').classList.remove('hidden');
             document.getElementById('appScreen').classList.add('hidden');
-            resetForm();
         };
+
+        // Load all data
+        async function loadData() {
+            await loadNodes();
+            await loadEvents();
+            renderNodes();
+        }
+
+        // Load nodes
+        async function loadNodes() {
+            try {
+                const q = query(collection(db, 'nodes'), where('user', '==', currentUser));
+                const querySnapshot = await getDocs(q);
+                allNodes = [];
+                querySnapshot.forEach((doc) => {
+                    allNodes.push({ id: doc.id, ...doc.data() });
+                });
+                console.log(`Loaded ${allNodes.length} nodes`);
+            } catch (error) {
+                console.error('Error loading nodes:', error);
+                alert('Error al cargar nodos: ' + error.message);
+            }
+        }
+
+        // Load events
+        async function loadEvents() {
+            try {
+                const q = query(collection(db, 'events'), where('user', '==', currentUser));
+                const querySnapshot = await getDocs(q);
+                allEvents = [];
+                querySnapshot.forEach((doc) => {
+                    allEvents.push({ id: doc.id, ...doc.data() });
+                });
+                allEvents.sort((a, b) => b.date.localeCompare(a.date));
+                console.log(`Loaded ${allEvents.length} events`);
+            } catch (error) {
+                console.error('Error loading events:', error);
+                alert('Error al cargar eventos: ' + error.message);
+            }
+        }
 
         // Tab navigation
         window.showTab = function(tabName) {
@@ -828,565 +754,406 @@
             event.target.classList.add('active');
             document.getElementById(tabName + 'Tab').classList.add('active');
 
-            if (tabName === 'calendar') {
-                renderCalendar();
-            } else if (tabName === 'list') {
-                renderInteractionList();
-            } else if (tabName === 'stats') {
-                renderStats();
-            } else if (tabName === 'insights') {
-                renderInsights();
-            }
+            if (tabName === 'nodes') renderNodes();
+            else if (tabName === 'events') renderEvents();
+            else if (tabName === 'network') renderNetwork();
+            else if (tabName === 'analytics') renderAnalytics();
+            else if (tabName === 'spawn') renderSpawnAnalysis();
+            else if (tabName === 'profile') renderProfile();
         };
 
-        // Slider updates
-        window.updateSliderValue = function(id) {
-            const slider = document.getElementById(id);
-            const valueDisplay = document.getElementById(id + 'Value');
-            valueDisplay.textContent = slider.value;
-        };
-
-        // Mood selection
-        window.setMoodBefore = function(mood) {
-            document.getElementById('moodBefore').value = mood;
-            document.querySelectorAll('#moodBeforeSelector .emoji-option').forEach(opt => {
-                opt.classList.remove('selected');
-            });
-            document.querySelector(`#moodBeforeSelector [data-mood="${mood}"]`).classList.add('selected');
-        };
-
-        window.setMoodAfter = function(mood) {
-            document.getElementById('moodAfter').value = mood;
-            document.querySelectorAll('#moodAfterSelector .emoji-option').forEach(opt => {
-                opt.classList.remove('selected');
-            });
-            document.querySelector(`#moodAfterSelector [data-mood="${mood}"]`).classList.add('selected');
-        };
-
-        // Save interaction
-        window.saveInteraction = async function(event) {
-            event.preventDefault();
-
-            const interaction = {
-                user: currentUser,
-                date: document.getElementById('date').value,
-                duration: parseInt(document.getElementById('duration').value),
-                place: document.getElementById('place').value,
-                people: document.getElementById('people').value,
-                outfit: document.getElementById('outfit').value,
-                interactionType: document.getElementById('interactionType').value,
-                goal: document.getElementById('goal').value,
-                goalAchieved: document.getElementById('goalAchieved').value,
-                moodBefore: document.getElementById('moodBefore').value,
-                moodAfter: document.getElementById('moodAfter').value,
-                connection: parseInt(document.getElementById('connection').value),
-                authenticity: parseInt(document.getElementById('authenticity').value),
-                energy: parseInt(document.getElementById('energy').value),
-                reciprocity: parseInt(document.getElementById('reciprocity').value),
-                whatWorked: document.getElementById('whatWorked').value,
-                whatToImprove: document.getElementById('whatToImprove').value,
-                notes: document.getElementById('notes').value,
-                timestamp: new Date().toISOString()
-            };
-
-            // Calculate overall score
-            interaction.overallScore = (interaction.connection + interaction.authenticity +
-                                       interaction.energy + interaction.reciprocity) / 4;
-
-            try {
-                await addDoc(collection(db, 'interactions'), interaction);
-                alert('¡Interacción guardada con éxito! ✅');
-                resetForm();
-                await loadInteractions();
-                updateCurrentView();
-            } catch (error) {
-                console.error('Error:', error);
-                alert('Error al guardar la interacción: ' + error.message);
-            }
-        };
-
-        // Reset form
-        function resetForm() {
-            document.getElementById('interactionForm').reset();
-            document.getElementById('date').valueAsDate = new Date();
-
-            // Reset sliders
-            ['connection', 'authenticity', 'energy', 'reciprocity'].forEach(id => {
-                document.getElementById(id).value = 5;
-                document.getElementById(id + 'Value').textContent = 5;
-            });
-
-            // Reset mood selections
-            document.querySelectorAll('.emoji-option').forEach(opt => {
-                opt.classList.remove('selected');
-            });
-        }
-
-        // Load interactions
-        async function loadInteractions() {
-            try {
-                const q = query(
-                    collection(db, 'interactions'),
-                    where('user', '==', currentUser)
-                );
-
-                const querySnapshot = await getDocs(q);
-                allInteractions = [];
-                querySnapshot.forEach((doc) => {
-                    allInteractions.push({ id: doc.id, ...doc.data() });
-                });
-
-                // Sort by date descending
-                allInteractions.sort((a, b) => {
-                    if (a.date > b.date) return -1;
-                    if (a.date < b.date) return 1;
-                    return 0;
-                });
-
-                console.log(`Loaded ${allInteractions.length} interactions for ${currentUser}`);
-            } catch (error) {
-                console.error('Error loading interactions:', error);
-                alert('Error al cargar interacciones: ' + error.message + '\n\nPor favor, verifica las reglas de Firestore.');
-            }
-        }
-
-        // Update current view
-        function updateCurrentView() {
-            const activeTab = document.querySelector('.tab-content.active');
-            if (!activeTab) return;
-
-            const tabId = activeTab.id;
-            if (tabId === 'calendarTab') {
-                renderCalendar();
-            } else if (tabId === 'listTab') {
-                renderInteractionList();
-            } else if (tabId === 'statsTab') {
-                renderStats();
-            } else if (tabId === 'insightsTab') {
-                renderInsights();
-            }
-        }
-
-        // Render calendar
-        window.renderCalendar = function() {
-            const year = currentMonth.getFullYear();
-            const month = currentMonth.getMonth();
-
-            const monthNames = ['Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio',
-                              'Julio', 'Agosto', 'Septiembre', 'Octubre', 'Noviembre', 'Diciembre'];
-
-            document.getElementById('currentMonth').textContent = `${monthNames[month]} ${year}`;
-
-            const firstDay = new Date(year, month, 1).getDay();
-            const daysInMonth = new Date(year, month + 1, 0).getDate();
-
-            let calendarHTML = '';
-            const dayNames = ['Dom', 'Lun', 'Mar', 'Mié', 'Jue', 'Vie', 'Sáb'];
-
-            dayNames.forEach(day => {
-                calendarHTML += `<div class="calendar-header">${day}</div>`;
-            });
-
-            for (let i = 0; i < firstDay; i++) {
-                calendarHTML += '<div class="calendar-day"></div>';
-            }
-
-            for (let day = 1; day <= daysInMonth; day++) {
-                const dateStr = `${year}-${String(month + 1).padStart(2, '0')}-${String(day).padStart(2, '0')}`;
-                const dayInteractions = allInteractions.filter(i => i.date === dateStr);
-                const hasInteraction = dayInteractions.length > 0;
-
-                calendarHTML += `
-                    <div class="calendar-day ${hasInteraction ? 'has-interaction' : ''}">
-                        <div class="date">${day}</div>
-                        ${hasInteraction ? `<div class="count">${dayInteractions.length} interacción${dayInteractions.length > 1 ? 'es' : ''}</div>` : ''}
-                    </div>
-                `;
-            }
-
-            document.getElementById('calendar').innerHTML = calendarHTML;
-        };
-
-        window.changeMonth = function(delta) {
-            currentMonth = new Date(currentMonth.getFullYear(), currentMonth.getMonth() + delta, 1);
-            renderCalendar();
-        };
-
-        // Render interaction list
-        function renderInteractionList() {
-            if (allInteractions.length === 0) {
-                document.getElementById('interactionList').innerHTML = '<p>No tienes interacciones registradas aún.</p>';
+        // Render nodes list
+        function renderNodes() {
+            if (allNodes.length === 0) {
+                document.getElementById('nodesList').innerHTML = '<p>No has creado ningún nodo aún. Haz click en "Nuevo Nodo" para empezar.</p>';
                 return;
             }
 
-            const listHTML = allInteractions.map(interaction => {
-                const avgScore = interaction.overallScore ||
-                    ((interaction.connection + interaction.authenticity + interaction.energy + interaction.reciprocity) / 4);
+            const html = allNodes.map(node => `
+                <div class="node-card" onclick="editNode('${node.id}')">
+                    <div class="node-header">
+                        <div>
+                            <div class="node-name" style="border-left: 4px solid ${node.color || '#3498db'}; padding-left: 10px;">
+                                ${node.name}
+                            </div>
+                            <div style="font-size: 0.9em; color: #666; margin-top: 5px;">
+                                ${node.job || 'Sin trabajo'} ${node.age ? `• ${node.age} años` : ''}
+                            </div>
+                        </div>
+                        <div class="node-badges">
+                            ${node.romanticValue >= 7 ? '<span class="badge badge-romantic">💕 High Romantic</span>' : ''}
+                            ${node.socialValue >= 7 ? '<span class="badge badge-social">🌟 High Social</span>' : ''}
+                            ${node.trustLevel >= 8 ? '<span class="badge badge-high">🔒 High Trust</span>' : ''}
+                        </div>
+                    </div>
+                    <div class="kpi-grid">
+                        <div class="kpi-item">
+                            <div class="kpi-label">Romántico</div>
+                            <div class="kpi-value">${node.romanticValue || 0}/10</div>
+                        </div>
+                        <div class="kpi-item">
+                            <div class="kpi-label">Social</div>
+                            <div class="kpi-value">${node.socialValue || 0}/10</div>
+                        </div>
+                        <div class="kpi-item">
+                            <div class="kpi-label">Confianza</div>
+                            <div class="kpi-value">${node.trustLevel || 0}/10</div>
+                        </div>
+                        <div class="kpi-item">
+                            <div class="kpi-label">Eventos</div>
+                            <div class="kpi-value">${countNodeEvents(node.id)}</div>
+                        </div>
+                    </div>
+                    ${node.places ? `<p style="margin-top: 10px;"><strong>📍 Lugares:</strong> ${node.places}</p>` : ''}
+                    ${node.hobbies ? `<p><strong>🎯 Hobbies:</strong> ${node.hobbies}</p>` : ''}
+                </div>
+            `).join('');
+
+            document.getElementById('nodesList').innerHTML = html;
+        }
+
+        // Render events
+        function renderEvents() {
+            if (allEvents.length === 0) {
+                document.getElementById('eventsList').innerHTML = '<p>No has registrado ningún evento aún.</p>';
+                return;
+            }
+
+            const html = allEvents.map(evt => {
+                const nodeNames = evt.nodes ? evt.nodes.map(nid => {
+                    const node = allNodes.find(n => n.id === nid);
+                    return node ? node.name : 'Desconocido';
+                }).join(', ') : '';
 
                 return `
-                    <div class="interaction-card">
-                        <div class="interaction-header">
-                            <span class="interaction-date">📅 ${formatDate(interaction.date)}</span>
-                            <div class="interaction-badges">
-                                <span class="badge">Score: ${avgScore.toFixed(1)}/10</span>
-                                <span class="badge">${interaction.duration} min</span>
-                            </div>
+                    <div class="event-card">
+                        <div class="event-header">
+                            <span>📅 ${evt.date} ${evt.time || ''}</span>
+                            <span>📍 ${evt.place}</span>
                         </div>
-                        <div class="interaction-details">
-                            <p><strong>📍 Lugar:</strong> ${interaction.place}</p>
-                            <p><strong>👥 Personas:</strong> ${interaction.people}</p>
-                            <p><strong>👔 Ropa:</strong> ${interaction.outfit}</p>
-                            <p><strong>🏷️ Tipo:</strong> ${interaction.interactionType}</p>
-                            ${interaction.goal ? `<p><strong>🎯 Objetivo:</strong> ${interaction.goal} ${interaction.goalAchieved ? '(' + interaction.goalAchieved + ')' : ''}</p>` : ''}
-                        </div>
-                        <div class="dimension-display">
-                            <div class="dimension-item">
-                                <div class="dimension-label">Conexión</div>
-                                <div class="dimension-value">${interaction.connection}/10</div>
-                            </div>
-                            <div class="dimension-item">
-                                <div class="dimension-label">Autenticidad</div>
-                                <div class="dimension-value">${interaction.authenticity}/10</div>
-                            </div>
-                            <div class="dimension-item">
-                                <div class="dimension-label">Energía</div>
-                                <div class="dimension-value">${interaction.energy}/10</div>
-                            </div>
-                            <div class="dimension-item">
-                                <div class="dimension-label">Reciprocidad</div>
-                                <div class="dimension-value">${interaction.reciprocity}/10</div>
-                            </div>
-                        </div>
-                        ${interaction.whatWorked ? `<p style="margin-top: 10px;"><strong>✅ Funcionó:</strong> ${interaction.whatWorked}</p>` : ''}
-                        ${interaction.whatToImprove ? `<p><strong>📈 Mejorar:</strong> ${interaction.whatToImprove}</p>` : ''}
-                        ${interaction.notes ? `<p><strong>📝 Notas:</strong> ${interaction.notes}</p>` : ''}
+                        <p><strong>👥 Nodos:</strong> ${nodeNames}</p>
+                        ${evt.situation ? `<p><strong>🎯 Situación:</strong> ${evt.situation}</p>` : ''}
+                        ${evt.weather ? `<p><strong>🌤️ Clima:</strong> ${evt.weather}</p>` : ''}
+                        ${evt.outfit ? `<p><strong>👔 Outfit:</strong> ${evt.outfit}</p>` : ''}
+                        ${evt.peopleCount ? `<p><strong>👥 Personas:</strong> ${evt.peopleCount}</p>` : ''}
+                        ${evt.notes ? `<p style="margin-top: 10px; font-style: italic;">${evt.notes}</p>` : ''}
                     </div>
                 `;
             }).join('');
 
-            document.getElementById('interactionList').innerHTML = listHTML;
+            document.getElementById('eventsList').innerHTML = html;
         }
 
-        // Render stats
-        function renderStats() {
-            if (allInteractions.length === 0) {
-                document.getElementById('statsGrid').innerHTML = '<p>No hay datos suficientes para mostrar estadísticas.</p>';
-                return;
-            }
+        // Render network visualization
+        function renderNetwork() {
+            const networkData = {
+                totalNodes: allNodes.length,
+                totalEvents: allEvents.length,
+                avgConnections: allNodes.length > 0 ? (allEvents.length / allNodes.length).toFixed(1) : 0
+            };
 
-            const totalInteractions = allInteractions.length;
-            const avgConnection = (allInteractions.reduce((sum, i) => sum + i.connection, 0) / totalInteractions).toFixed(1);
-            const avgAuthenticity = (allInteractions.reduce((sum, i) => sum + i.authenticity, 0) / totalInteractions).toFixed(1);
-            const avgEnergy = (allInteractions.reduce((sum, i) => sum + i.energy, 0) / totalInteractions).toFixed(1);
-            const avgReciprocity = (allInteractions.reduce((sum, i) => sum + i.reciprocity, 0) / totalInteractions).toFixed(1);
-            const totalMinutes = allInteractions.reduce((sum, i) => sum + (i.duration || 0), 0);
-            const uniquePlaces = new Set(allInteractions.map(i => i.place)).size;
+            document.getElementById('networkViz').innerHTML = `
+                <div style="padding: 40px;">
+                    <h3>Estadísticas de Red</h3>
+                    <div class="stats-grid" style="margin-top: 20px;">
+                        <div class="stat-card">
+                            <div class="stat-label">Total Nodos</div>
+                            <div class="stat-value">${networkData.totalNodes}</div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-label">Total Eventos</div>
+                            <div class="stat-value">${networkData.totalEvents}</div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-label">Eventos/Nodo</div>
+                            <div class="stat-value">${networkData.avgConnections}</div>
+                        </div>
+                    </div>
+                    <p style="margin-top: 30px; color: #666;">Visualización de grafo en desarrollo. Mientras tanto, usa la pestaña Analytics para ver conexiones.</p>
+                </div>
+            `;
+        }
 
-            const statsHTML = `
+        // Render analytics
+        function renderAnalytics() {
+            const topRomantic = [...allNodes].sort((a, b) => (b.romanticValue || 0) - (a.romanticValue || 0)).slice(0, 5);
+            const topSocial = [...allNodes].sort((a, b) => (b.socialValue || 0) - (a.socialValue || 0)).slice(0, 5);
+            const topTrust = [...allNodes].sort((a, b) => (b.trustLevel || 0) - (a.trustLevel || 0)).slice(0, 5);
+
+            const avgRomantic = allNodes.length > 0 ? (allNodes.reduce((sum, n) => sum + (n.romanticValue || 0), 0) / allNodes.length).toFixed(1) : 0;
+            const avgSocial = allNodes.length > 0 ? (allNodes.reduce((sum, n) => sum + (n.socialValue || 0), 0) / allNodes.length).toFixed(1) : 0;
+            const avgTrust = allNodes.length > 0 ? (allNodes.reduce((sum, n) => sum + (n.trustLevel || 0), 0) / allNodes.length).toFixed(1) : 0;
+
+            document.getElementById('analyticsGrid').innerHTML = `
                 <div class="stat-card">
-                    <div class="stat-label">Total Interacciones</div>
-                    <div class="stat-value">${totalInteractions}</div>
+                    <div class="stat-label">Valor Romántico Promedio</div>
+                    <div class="stat-value">${avgRomantic}/10</div>
                 </div>
                 <div class="stat-card">
-                    <div class="stat-label">Conexión Promedio</div>
-                    <div class="stat-value">${avgConnection}/10</div>
+                    <div class="stat-label">Valor Social Promedio</div>
+                    <div class="stat-value">${avgSocial}/10</div>
                 </div>
                 <div class="stat-card">
-                    <div class="stat-label">Autenticidad Promedio</div>
-                    <div class="stat-value">${avgAuthenticity}/10</div>
+                    <div class="stat-label">Confianza Promedio</div>
+                    <div class="stat-value">${avgTrust}/10</div>
                 </div>
                 <div class="stat-card">
-                    <div class="stat-label">Energía Promedio</div>
-                    <div class="stat-value">${avgEnergy}/10</div>
-                </div>
-                <div class="stat-card">
-                    <div class="stat-label">Tiempo Total Social</div>
-                    <div class="stat-value">${Math.round(totalMinutes / 60)}h</div>
-                </div>
-                <div class="stat-card">
-                    <div class="stat-label">Lugares Únicos</div>
-                    <div class="stat-value">${uniquePlaces}</div>
+                    <div class="stat-label">Total Nodos</div>
+                    <div class="stat-value">${allNodes.length}</div>
                 </div>
             `;
 
-            document.getElementById('statsGrid').innerHTML = statsHTML;
-
-            // Chart by type
-            const typeStats = {};
-            allInteractions.forEach(i => {
-                if (!typeStats[i.interactionType]) {
-                    typeStats[i.interactionType] = { connection: 0, authenticity: 0, energy: 0, reciprocity: 0, count: 0 };
-                }
-                typeStats[i.interactionType].connection += i.connection;
-                typeStats[i.interactionType].authenticity += i.authenticity;
-                typeStats[i.interactionType].energy += i.energy;
-                typeStats[i.interactionType].reciprocity += i.reciprocity;
-                typeStats[i.interactionType].count++;
-            });
-
-            const typeChartHTML = Object.entries(typeStats)
-                .map(([type, stats]) => {
-                    const avgScore = ((stats.connection + stats.authenticity + stats.energy + stats.reciprocity) / (stats.count * 4)).toFixed(1);
-                    const height = (avgScore / 10) * 100;
-                    return `
-                        <div class="bar" style="height: ${height}%">
-                            <div class="bar-value">${avgScore}</div>
-                            <div class="bar-label">${type}</div>
-                        </div>
-                    `;
-                })
-                .join('');
-
-            document.getElementById('dimensionsByType').innerHTML = typeChartHTML || '<p>No hay datos</p>';
-
-            // Chart by place
-            const placeStats = {};
-            allInteractions.forEach(i => {
-                if (!placeStats[i.place]) {
-                    placeStats[i.place] = { total: 0, count: 0 };
-                }
-                const score = (i.connection + i.authenticity + i.energy + i.reciprocity) / 4;
-                placeStats[i.place].total += score;
-                placeStats[i.place].count++;
-            });
-
-            const placeChartHTML = Object.entries(placeStats)
-                .map(([place, stats]) => {
-                    const avg = (stats.total / stats.count).toFixed(1);
-                    const height = (avg / 10) * 100;
-                    return `
-                        <div class="bar" style="height: ${height}%">
-                            <div class="bar-value">${avg}</div>
-                            <div class="bar-label">${place.substring(0, 15)}</div>
-                        </div>
-                    `;
-                })
-                .slice(0, 10)
-                .join('');
-
-            document.getElementById('placeChart').innerHTML = placeChartHTML || '<p>No hay datos</p>';
-        }
-
-        // Render insights
-        function renderInsights() {
-            if (allInteractions.length < 3) {
-                document.getElementById('insightsList').innerHTML = '<p>Necesitas al menos 3 interacciones para generar insights.</p>';
-                return;
-            }
-
-            let insights = [];
-
-            // Best place
-            const placeScores = {};
-            allInteractions.forEach(i => {
-                if (!placeScores[i.place]) placeScores[i.place] = [];
-                const score = (i.connection + i.authenticity + i.energy + i.reciprocity) / 4;
-                placeScores[i.place].push(score);
-            });
-
-            let bestPlace = null;
-            let bestPlaceScore = 0;
-            Object.entries(placeScores).forEach(([place, scores]) => {
-                const avg = scores.reduce((a, b) => a + b, 0) / scores.length;
-                if (avg > bestPlaceScore) {
-                    bestPlaceScore = avg;
-                    bestPlace = place;
-                }
-            });
-
-            if (bestPlace) {
-                insights.push({
-                    title: '📍 Mejor Lugar',
-                    message: `Tus mejores interacciones ocurren en "${bestPlace}" con un score promedio de ${bestPlaceScore.toFixed(1)}/10. ¡Considera ir más a menudo!`
-                });
-            }
-
-            // Best outfit
-            const outfitScores = {};
-            allInteractions.forEach(i => {
-                if (!outfitScores[i.outfit]) outfitScores[i.outfit] = [];
-                const score = (i.connection + i.authenticity + i.energy + i.reciprocity) / 4;
-                outfitScores[i.outfit].push(score);
-            });
-
-            let bestOutfit = null;
-            let bestOutfitScore = 0;
-            Object.entries(outfitScores).forEach(([outfit, scores]) => {
-                const avg = scores.reduce((a, b) => a + b, 0) / scores.length;
-                if (avg > bestOutfitScore && scores.length > 1) {
-                    bestOutfitScore = avg;
-                    bestOutfit = outfit;
-                }
-            });
-
-            if (bestOutfit) {
-                insights.push({
-                    title: '👔 Mejor Outfit',
-                    message: `Cuando llevas "${bestOutfit}", tus interacciones tienen un score de ${bestOutfitScore.toFixed(1)}/10. ¡Te sienta bien!`
-                });
-            }
-
-            // Mood change pattern
-            const moodChanges = allInteractions.map(i => {
-                return moodValues[i.moodAfter] - moodValues[i.moodBefore];
-            });
-            const avgMoodChange = moodChanges.reduce((a, b) => a + b, 0) / moodChanges.length;
-
-            if (avgMoodChange > 0.5) {
-                insights.push({
-                    title: '😊 Impacto Positivo',
-                    message: `Las interacciones sociales mejoran tu estado de ánimo en promedio. ¡Sigue conectando con otros!`
-                });
-            } else if (avgMoodChange < -0.5) {
-                insights.push({
-                    title: '⚠️ Atención',
-                    message: `Algunas interacciones están agotándote emocionalmente. Considera qué patrones están causando esto.`
-                });
-            }
-
-            // Best interaction type
-            const typeScores = {};
-            allInteractions.forEach(i => {
-                if (!typeScores[i.interactionType]) typeScores[i.interactionType] = [];
-                const score = (i.connection + i.authenticity + i.energy + i.reciprocity) / 4;
-                typeScores[i.interactionType].push(score);
-            });
-
-            let bestType = null;
-            let bestTypeScore = 0;
-            Object.entries(typeScores).forEach(([type, scores]) => {
-                const avg = scores.reduce((a, b) => a + b, 0) / scores.length;
-                if (avg > bestTypeScore) {
-                    bestTypeScore = avg;
-                    bestType = type;
-                }
-            });
-
-            if (bestType) {
-                insights.push({
-                    title: '🎯 Mejor Tipo de Interacción',
-                    message: `Las interacciones de tipo "${bestType}" son tus mejores con ${bestTypeScore.toFixed(1)}/10 de score promedio.`
-                });
-            }
-
-            // Energy patterns
-            const avgEnergyLevel = allInteractions.reduce((sum, i) => sum + i.energy, 0) / allInteractions.length;
-            if (avgEnergyLevel < 5) {
-                insights.push({
-                    title: '🔋 Nivel de Energía',
-                    message: `Tu energía social promedio es de ${avgEnergyLevel.toFixed(1)}/10. Considera interacciones más cortas o con menos personas.`
-                });
-            } else if (avgEnergyLevel > 7) {
-                insights.push({
-                    title: '⚡ Alta Energía Social',
-                    message: `¡Tu energía social es excelente! Promedio de ${avgEnergyLevel.toFixed(1)}/10. Aprovecha esto para expandir tu círculo.`
-                });
-            }
-
-            const insightsHTML = insights.map(insight => `
-                <div class="insight-card">
-                    <h4>${insight.title}</h4>
-                    <p>${insight.message}</p>
+            document.getElementById('topNodes').innerHTML = `
+                <div class="form-row">
+                    <div>
+                        <h3 style="color: #e74c3c; margin-bottom: 10px;">💕 Top Romántico</h3>
+                        ${topRomantic.map(n => `<p>• ${n.name} (${n.romanticValue || 0}/10)</p>`).join('') || '<p>No hay datos</p>'}
+                    </div>
+                    <div>
+                        <h3 style="color: #27ae60; margin-bottom: 10px;">🌟 Top Social</h3>
+                        ${topSocial.map(n => `<p>• ${n.name} (${n.socialValue || 0}/10)</p>`).join('') || '<p>No hay datos</p>'}
+                    </div>
                 </div>
-            `).join('');
-
-            document.getElementById('insightsList').innerHTML = insightsHTML;
+                <div style="margin-top: 20px;">
+                    <h3 style="color: #3498db; margin-bottom: 10px;">🔒 Top Confianza</h3>
+                    ${topTrust.map(n => `<p>• ${n.name} (${n.trustLevel || 0}/10)</p>`).join('') || '<p>No hay datos</p>'}
+                </div>
+            `;
         }
 
-        // Helper function
-        function formatDate(dateStr) {
-            const date = new Date(dateStr + 'T00:00:00');
-            return date.toLocaleDateString('es-ES', { year: 'numeric', month: 'long', day: 'numeric' });
-        }
-
-        // Download CSV function
-        window.downloadCSV = function() {
-            if (allInteractions.length === 0) {
-                alert('No hay datos para exportar');
-                return;
-            }
-
-            // Define CSV headers
-            const headers = [
-                'Usuario',
-                'Fecha',
-                'Duración (min)',
-                'Lugar',
-                'Personas',
-                'Outfit',
-                'Tipo de Interacción',
-                'Objetivo',
-                'Objetivo Cumplido',
-                'Mood Antes',
-                'Mood Después',
-                'Conexión (1-10)',
-                'Autenticidad (1-10)',
-                'Energía (1-10)',
-                'Reciprocidad (1-10)',
-                'Score General',
-                'Qué Funcionó',
-                'Qué Mejorar',
-                'Notas',
-                'Timestamp'
-            ];
-
-            // Convert data to CSV format
-            let csv = headers.join(',') + '\n';
-
-            allInteractions.forEach(interaction => {
-                const overallScore = interaction.overallScore ||
-                    ((interaction.connection + interaction.authenticity + interaction.energy + interaction.reciprocity) / 4);
-
-                const row = [
-                    escapeCSV(interaction.user || ''),
-                    escapeCSV(interaction.date || ''),
-                    interaction.duration || '',
-                    escapeCSV(interaction.place || ''),
-                    escapeCSV(interaction.people || ''),
-                    escapeCSV(interaction.outfit || ''),
-                    escapeCSV(interaction.interactionType || ''),
-                    escapeCSV(interaction.goal || ''),
-                    escapeCSV(interaction.goalAchieved || ''),
-                    escapeCSV(interaction.moodBefore || ''),
-                    escapeCSV(interaction.moodAfter || ''),
-                    interaction.connection || '',
-                    interaction.authenticity || '',
-                    interaction.energy || '',
-                    interaction.reciprocity || '',
-                    overallScore.toFixed(2),
-                    escapeCSV(interaction.whatWorked || ''),
-                    escapeCSV(interaction.whatToImprove || ''),
-                    escapeCSV(interaction.notes || ''),
-                    escapeCSV(interaction.timestamp || '')
-                ];
-
-                csv += row.join(',') + '\n';
+        // Render spawn analysis
+        function renderSpawnAnalysis() {
+            const placeStats = {};
+            allEvents.forEach(evt => {
+                if (!placeStats[evt.place]) {
+                    placeStats[evt.place] = { count: 0, nodes: new Set(), highValue: 0 };
+                }
+                placeStats[evt.place].count++;
+                if (evt.nodes) {
+                    evt.nodes.forEach(nid => {
+                        placeStats[evt.place].nodes.add(nid);
+                        const node = allNodes.find(n => n.id === nid);
+                        if (node && ((node.romanticValue || 0) >= 7 || (node.socialValue || 0) >= 7)) {
+                            placeStats[evt.place].highValue++;
+                        }
+                    });
+                }
             });
 
-            // Create blob and download
-            const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
-            const link = document.createElement('a');
-            const url = URL.createObjectURL(blob);
+            const sortedPlaces = Object.entries(placeStats)
+                .map(([place, stats]) => ({
+                    place,
+                    ...stats,
+                    uniqueNodes: stats.nodes.size,
+                    spawnRate: stats.uniqueNodes / stats.count
+                }))
+                .sort((a, b) => b.highValue - a.highValue);
 
-            const fileName = `social-tracker-${currentUser}-${new Date().toISOString().split('T')[0]}.csv`;
+            document.getElementById('spawnAnalysis').innerHTML = `
+                <p style="margin-bottom: 20px;">Análisis de lugares donde aparecen nodos de alto valor (romántico ≥7 o social ≥7)</p>
+                ${sortedPlaces.map(place => `
+                    <div class="node-card">
+                        <h3>📍 ${place.place}</h3>
+                        <div class="kpi-grid" style="margin-top: 15px;">
+                            <div class="kpi-item">
+                                <div class="kpi-label">High-Value Nodes</div>
+                                <div class="kpi-value">${place.highValue}</div>
+                            </div>
+                            <div class="kpi-item">
+                                <div class="kpi-label">Total Eventos</div>
+                                <div class="kpi-value">${place.count}</div>
+                            </div>
+                            <div class="kpi-item">
+                                <div class="kpi-label">Nodos Únicos</div>
+                                <div class="kpi-value">${place.uniqueNodes}</div>
+                            </div>
+                            <div class="kpi-item">
+                                <div class="kpi-label">Spawn Rate</div>
+                                <div class="kpi-value">${place.spawnRate.toFixed(2)}</div>
+                            </div>
+                        </div>
+                    </div>
+                `).join('') || '<p>No hay datos suficientes para análisis</p>'}
+            `;
+        }
 
-            link.setAttribute('href', url);
-            link.setAttribute('download', fileName);
-            link.style.visibility = 'hidden';
-            document.body.appendChild(link);
-            link.click();
-            document.body.removeChild(link);
+        // Render profile
+        function renderProfile() {
+            document.getElementById('profileData').innerHTML = `
+                <p style="margin-bottom: 20px;">Configuración de tu perfil personal (OwnData) - En desarrollo</p>
+                <div class="node-card">
+                    <h3>Usuario: ${currentUser}</h3>
+                    <p style="margin-top: 15px; color: #666;">Próximamente podrás configurar tus propios atributos, hobbies, objetivos, etc.</p>
+                </div>
+            `;
+        }
+
+        // Count node events
+        function countNodeEvents(nodeId) {
+            return allEvents.filter(evt => evt.nodes && evt.nodes.includes(nodeId)).length;
+        }
+
+        // Modal functions
+        window.openNodeModal = function() {
+            currentNodeId = null;
+            document.getElementById('nodeForm').reset();
+            document.getElementById('nodeName').value = '';
+            document.getElementById('deleteNodeBtn').style.display = 'none';
+            updateSlider('romanticValue');
+            updateSlider('socialValue');
+            updateSlider('trustLevel');
+            document.getElementById('nodeModal').style.display = 'block';
         };
 
-        // Helper function to escape CSV fields
-        function escapeCSV(str) {
-            if (str === null || str === undefined) return '';
-            str = String(str);
-            if (str.includes(',') || str.includes('"') || str.includes('\n')) {
-                return '"' + str.replace(/"/g, '""') + '"';
+        window.closeNodeModal = function() {
+            document.getElementById('nodeModal').style.display = 'none';
+        };
+
+        window.openEventModal = function() {
+            document.getElementById('eventForm').reset();
+            document.getElementById('eventDate').valueAsDate = new Date();
+
+            // Populate nodes selector
+            const select = document.getElementById('eventNodes');
+            select.innerHTML = allNodes.map(n => `<option value="${n.id}">${n.name}</option>`).join('');
+
+            document.getElementById('eventModal').style.display = 'block';
+        };
+
+        window.closeEventModal = function() {
+            document.getElementById('eventModal').style.display = 'none';
+        };
+
+        window.updateSlider = function(name) {
+            const slider = document.getElementById('node' + name.charAt(0).toUpperCase() + name.slice(1));
+            const display = document.getElementById(name + 'Display');
+            display.textContent = slider.value;
+        };
+
+        // Edit node
+        window.editNode = function(nodeId) {
+            const node = allNodes.find(n => n.id === nodeId);
+            if (!node) return;
+
+            currentNodeId = nodeId;
+            document.getElementById('nodeName').value = node.name || '';
+            document.getElementById('nodeAge').value = node.age || '';
+            document.getElementById('nodeColor').value = node.color || '#3498db';
+            document.getElementById('nodeJob').value = node.job || '';
+            document.getElementById('nodeHobbies').value = node.hobbies || '';
+            document.getElementById('nodeLongTermGoals').value = node.longTermGoals || '';
+            document.getElementById('nodeIsInLove').value = node.isInLove || 'no';
+            document.getElementById('nodeRelationType').value = node.relationType || '';
+            document.getElementById('nodeRomanticValue').value = node.romanticValue || 5;
+            document.getElementById('nodeSocialValue').value = node.socialValue || 5;
+            document.getElementById('nodeTrustLevel').value = node.trustLevel || 5;
+            document.getElementById('nodePlaces').value = node.places || '';
+            document.getElementById('nodeHighlights').value = node.highlights || '';
+
+            updateSlider('romanticValue');
+            updateSlider('socialValue');
+            updateSlider('trustLevel');
+
+            document.getElementById('deleteNodeBtn').style.display = 'inline-block';
+            document.getElementById('nodeModal').style.display = 'block';
+        };
+
+        // Save node
+        window.saveNode = async function(e) {
+            e.preventDefault();
+
+            const nodeData = {
+                user: currentUser,
+                name: document.getElementById('nodeName').value,
+                age: parseInt(document.getElementById('nodeAge').value) || null,
+                color: document.getElementById('nodeColor').value,
+                job: document.getElementById('nodeJob').value,
+                hobbies: document.getElementById('nodeHobbies').value,
+                longTermGoals: document.getElementById('nodeLongTermGoals').value,
+                isInLove: document.getElementById('nodeIsInLove').value,
+                relationType: document.getElementById('nodeRelationType').value,
+                romanticValue: parseInt(document.getElementById('nodeRomanticValue').value),
+                socialValue: parseInt(document.getElementById('nodeSocialValue').value),
+                trustLevel: parseInt(document.getElementById('nodeTrustLevel').value),
+                places: document.getElementById('nodePlaces').value,
+                highlights: document.getElementById('nodeHighlights').value,
+                updatedAt: new Date().toISOString()
+            };
+
+            try {
+                if (currentNodeId) {
+                    await updateDoc(doc(db, 'nodes', currentNodeId), nodeData);
+                    alert('Nodo actualizado correctamente');
+                } else {
+                    nodeData.createdAt = new Date().toISOString();
+                    await addDoc(collection(db, 'nodes'), nodeData);
+                    alert('Nodo creado correctamente');
+                }
+                closeNodeModal();
+                await loadNodes();
+                renderNodes();
+            } catch (error) {
+                console.error('Error:', error);
+                alert('Error al guardar el nodo: ' + error.message);
             }
-            return str;
-        }
+        };
+
+        // Delete node
+        window.deleteNode = async function() {
+            if (!currentNodeId) return;
+            if (!confirm('¿Estás seguro de eliminar este nodo?')) return;
+
+            try {
+                await deleteDoc(doc(db, 'nodes', currentNodeId));
+                alert('Nodo eliminado correctamente');
+                closeNodeModal();
+                await loadNodes();
+                renderNodes();
+            } catch (error) {
+                console.error('Error:', error);
+                alert('Error al eliminar el nodo: ' + error.message);
+            }
+        };
+
+        // Save event
+        window.saveEvent = async function(e) {
+            e.preventDefault();
+
+            const selectedNodes = Array.from(document.getElementById('eventNodes').selectedOptions).map(opt => opt.value);
+
+            const eventData = {
+                user: currentUser,
+                date: document.getElementById('eventDate').value,
+                time: document.getElementById('eventTime').value,
+                nodes: selectedNodes,
+                place: document.getElementById('eventPlace').value,
+                weather: document.getElementById('eventWeather').value,
+                outfit: document.getElementById('eventOutfit').value,
+                peopleCount: parseInt(document.getElementById('eventPeopleCount').value) || null,
+                situation: document.getElementById('eventSituation').value,
+                environment: document.getElementById('eventEnvironment').value,
+                notes: document.getElementById('eventNotes').value,
+                createdAt: new Date().toISOString()
+            };
+
+            try {
+                await addDoc(collection(db, 'events'), eventData);
+                alert('Evento guardado correctamente');
+                closeEventModal();
+                await loadEvents();
+                renderEvents();
+            } catch (error) {
+                console.error('Error:', error);
+                alert('Error al guardar el evento: ' + error.message);
+            }
+        };
+
+        // Close modals on outside click
+        window.onclick = function(event) {
+            if (event.target.classList.contains('modal')) {
+                event.target.style.display = 'none';
+            }
+        };
     </script>
 </body>
 </html>
