@@ -453,25 +453,40 @@
                 </div>
 
                 <div id="nodesTab" class="tab-content active">
-                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
+                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; flex-wrap: wrap; gap: 10px;">
                         <h2>Gestión de Nodos (Personas)</h2>
-                        <button class="btn" onclick="openNodeModal()">➕ Nuevo Nodo</button>
+                        <div style="display: flex; gap: 10px;">
+                            <button class="btn btn-small" onclick="exportNodes()">📥 Export CSV</button>
+                            <button class="btn" onclick="openNodeModal()">➕ Nuevo Nodo</button>
+                        </div>
                     </div>
                     <div id="nodesList"></div>
                 </div>
 
                 <div id="eventsTab" class="tab-content">
-                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
+                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; flex-wrap: wrap; gap: 10px;">
                         <h2>Event Logs</h2>
-                        <button class="btn" onclick="openEventModal()">➕ Nuevo Evento</button>
+                        <div style="display: flex; gap: 10px;">
+                            <button class="btn btn-small" onclick="exportEvents()">📥 Export CSV</button>
+                            <button class="btn btn-small" onclick="exportAllData()">📦 Export All (JSON)</button>
+                            <button class="btn" onclick="openEventModal()">➕ Nuevo Evento</button>
+                        </div>
                     </div>
                     <div id="eventsList"></div>
                 </div>
 
                 <div id="networkTab" class="tab-content">
-                    <h2>Visualización de Red Social</h2>
-                    <div class="network-viz" id="networkViz">
-                        <p style="color: #666;">Cargando visualización de red...</p>
+                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
+                        <h2>Visualización de Red Social</h2>
+                        <button class="btn btn-small" onclick="refreshNetwork()">🔄 Actualizar</button>
+                    </div>
+                    <canvas id="networkCanvas" width="1200" height="600" style="border: 1px solid #ddd; border-radius: 10px; background: #f9f9f9; width: 100%; max-width: 1200px;"></canvas>
+                    <div style="margin-top: 20px; padding: 15px; background: #f0f0f0; border-radius: 8px;">
+                        <strong>Leyenda:</strong>
+                        <span style="margin-left: 20px;">🔴 Alto Valor Romántico</span>
+                        <span style="margin-left: 20px;">🟢 Alto Valor Social</span>
+                        <span style="margin-left: 20px;">🔵 Alta Confianza</span>
+                        <span style="margin-left: 20px;">⚪ Normal</span>
                     </div>
                 </div>
 
@@ -488,8 +503,97 @@
                 </div>
 
                 <div id="profileTab" class="tab-content">
-                    <h2>Mi Perfil (OwnData)</h2>
-                    <div id="profileData"></div>
+                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
+                        <h2>Mi Perfil (OwnData)</h2>
+                        <button class="btn btn-small" onclick="saveOwnData()">💾 Guardar Perfil</button>
+                    </div>
+
+                    <form id="ownDataForm">
+                        <div class="section-title">Información Personal</div>
+
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label>Hobbies Actuales</label>
+                                <input type="text" id="ownHobbies" placeholder="Separados por comas">
+                            </div>
+                            <div class="form-group">
+                                <label>Actividades Actuales</label>
+                                <input type="text" id="ownCurrentActivities" placeholder="Qué estás haciendo ahora">
+                            </div>
+                        </div>
+
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label>Estado Sentimental</label>
+                                <select id="ownIsInLove">
+                                    <option value="single">Soltero/a</option>
+                                    <option value="dating">Saliendo con alguien</option>
+                                    <option value="relationship">En una relación</option>
+                                    <option value="complicated">Es complicado</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label>Disponibilidad Social</label>
+                                <select id="ownAvailability">
+                                    <option value="high">Alta - Mucho tiempo libre</option>
+                                    <option value="medium">Media - Algo de tiempo</option>
+                                    <option value="low">Baja - Poco tiempo</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label>Trabajo/Estudios</label>
+                            <input type="text" id="ownJob" placeholder="Tu ocupación actual">
+                        </div>
+
+                        <div class="form-group">
+                            <label>Objetivos a Largo Plazo</label>
+                            <textarea id="ownLongTermGoals" placeholder="¿Qué quieres lograr en los próximos años?"></textarea>
+                        </div>
+
+                        <div class="form-group">
+                            <label>Sueños Alcanzados</label>
+                            <textarea id="ownDreamsAchieved" placeholder="¿Qué has logrado hasta ahora?"></textarea>
+                        </div>
+
+                        <div class="section-title">Auto-Evaluación (1-10)</div>
+
+                        <div class="form-group">
+                            <label>Nivel de Involucramiento Social: <span id="ownInvolvementDisplay">5</span></label>
+                            <input type="range" class="slider" id="ownInvolvement" min="1" max="10" value="5" oninput="updateOwnSlider('Involvement')">
+                        </div>
+
+                        <div class="form-group">
+                            <label>Nivel de Fitness: <span id="ownFitnessDisplay">5</span></label>
+                            <input type="range" class="slider" id="ownFitness" min="1" max="10" value="5" oninput="updateOwnSlider('Fitness')">
+                        </div>
+
+                        <div class="form-group">
+                            <label>Nivel de Originalidad: <span id="ownOriginalityDisplay">5</span></label>
+                            <input type="range" class="slider" id="ownOriginality" min="1" max="10" value="5" oninput="updateOwnSlider('Originality')">
+                        </div>
+
+                        <div class="form-group">
+                            <label>Nivel de Egoísmo (honesto): <span id="ownEgoismDisplay">5</span></label>
+                            <input type="range" class="slider" id="ownEgoism" min="1" max="10" value="5" oninput="updateOwnSlider('Egoism')">
+                        </div>
+
+                        <div class="form-group">
+                            <label>Nivel de Inteligencia: <span id="ownIntelligenceDisplay">5</span></label>
+                            <input type="range" class="slider" id="ownIntelligence" min="1" max="10" value="5" oninput="updateOwnSlider('Intelligence')">
+                        </div>
+
+                        <div class="form-group">
+                            <label>Gusto Musical</label>
+                            <input type="text" id="ownMusicTaste" placeholder="Géneros, artistas favoritos...">
+                        </div>
+
+                        <div class="section-title">Estado Actual</div>
+                        <div id="ownDataSummary" style="background: #f9f9f9; padding: 20px; border-radius: 8px; margin-top: 15px;">
+                            <p style="color: #666;">Guarda tu perfil para ver un resumen de tu estado actual.</p>
+                        </div>
+                    </form>
                 </div>
             </div>
         </div>
@@ -844,35 +948,96 @@
             document.getElementById('eventsList').innerHTML = html;
         }
 
-        // Render network visualization
+        // Render network visualization with Canvas
         function renderNetwork() {
-            const networkData = {
-                totalNodes: allNodes.length,
-                totalEvents: allEvents.length,
-                avgConnections: allNodes.length > 0 ? (allEvents.length / allNodes.length).toFixed(1) : 0
-            };
+            const canvas = document.getElementById('networkCanvas');
+            const ctx = canvas.getContext('2d');
 
-            document.getElementById('networkViz').innerHTML = `
-                <div style="padding: 40px;">
-                    <h3>Estadísticas de Red</h3>
-                    <div class="stats-grid" style="margin-top: 20px;">
-                        <div class="stat-card">
-                            <div class="stat-label">Total Nodos</div>
-                            <div class="stat-value">${networkData.totalNodes}</div>
-                        </div>
-                        <div class="stat-card">
-                            <div class="stat-label">Total Eventos</div>
-                            <div class="stat-value">${networkData.totalEvents}</div>
-                        </div>
-                        <div class="stat-card">
-                            <div class="stat-label">Eventos/Nodo</div>
-                            <div class="stat-value">${networkData.avgConnections}</div>
-                        </div>
-                    </div>
-                    <p style="margin-top: 30px; color: #666;">Visualización de grafo en desarrollo. Mientras tanto, usa la pestaña Analytics para ver conexiones.</p>
-                </div>
-            `;
+            // Clear canvas
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+            if (allNodes.length === 0) {
+                ctx.fillStyle = '#666';
+                ctx.font = '16px Arial';
+                ctx.textAlign = 'center';
+                ctx.fillText('No hay nodos para visualizar. Crea algunos nodos primero.', canvas.width / 2, canvas.height / 2);
+                return;
+            }
+
+            // Calculate node positions in a circle
+            const centerX = canvas.width / 2;
+            const centerY = canvas.height / 2;
+            const radius = Math.min(centerX, centerY) - 80;
+
+            const nodePositions = {};
+            allNodes.forEach((node, index) => {
+                const angle = (index / allNodes.length) * 2 * Math.PI;
+                nodePositions[node.id] = {
+                    x: centerX + radius * Math.cos(angle),
+                    y: centerY + radius * Math.sin(angle),
+                    node: node
+                };
+            });
+
+            // Draw connections (edges) first
+            ctx.strokeStyle = '#ccc';
+            ctx.lineWidth = 1;
+
+            allEvents.forEach(event => {
+                if (!event.nodes || event.nodes.length < 2) return;
+
+                // Draw lines between all nodes in the event
+                for (let i = 0; i < event.nodes.length; i++) {
+                    for (let j = i + 1; j < event.nodes.length; j++) {
+                        const node1Pos = nodePositions[event.nodes[i]];
+                        const node2Pos = nodePositions[event.nodes[j]];
+
+                        if (node1Pos && node2Pos) {
+                            ctx.beginPath();
+                            ctx.moveTo(node1Pos.x, node1Pos.y);
+                            ctx.lineTo(node2Pos.x, node2Pos.y);
+                            ctx.stroke();
+                        }
+                    }
+                }
+            });
+
+            // Draw nodes
+            Object.values(nodePositions).forEach(pos => {
+                const node = pos.node;
+
+                // Determine node color based on highest value
+                let color = node.color || '#3498db';
+                if ((node.romanticValue || 0) >= 7) color = '#e74c3c'; // Red for romantic
+                else if ((node.socialValue || 0) >= 7) color = '#27ae60'; // Green for social
+                else if ((node.trustLevel || 0) >= 8) color = '#3498db'; // Blue for trust
+
+                // Draw node circle
+                ctx.beginPath();
+                ctx.arc(pos.x, pos.y, 25, 0, 2 * Math.PI);
+                ctx.fillStyle = color;
+                ctx.fill();
+                ctx.strokeStyle = '#fff';
+                ctx.lineWidth = 3;
+                ctx.stroke();
+
+                // Draw node label
+                ctx.fillStyle = '#333';
+                ctx.font = 'bold 12px Arial';
+                ctx.textAlign = 'center';
+                ctx.fillText(node.name, pos.x, pos.y + 45);
+
+                // Draw event count
+                const eventCount = countNodeEvents(node.id);
+                ctx.fillStyle = '#fff';
+                ctx.font = 'bold 10px Arial';
+                ctx.fillText(eventCount, pos.x, pos.y + 5);
+            });
         }
+
+        window.refreshNetwork = function() {
+            renderNetwork();
+        };
 
         // Render analytics
         function renderAnalytics() {
@@ -978,14 +1143,123 @@
         }
 
         // Render profile
-        function renderProfile() {
-            document.getElementById('profileData').innerHTML = `
-                <p style="margin-bottom: 20px;">Configuración de tu perfil personal (OwnData) - En desarrollo</p>
-                <div class="node-card">
-                    <h3>Usuario: ${currentUser}</h3>
-                    <p style="margin-top: 15px; color: #666;">Próximamente podrás configurar tus propios atributos, hobbies, objetivos, etc.</p>
+        async function renderProfile() {
+            await loadOwnData();
+        }
+
+        // Load OwnData
+        async function loadOwnData() {
+            try {
+                const q = query(collection(db, 'ownData'), where('user', '==', currentUser));
+                const querySnapshot = await getDocs(q);
+
+                if (!querySnapshot.empty) {
+                    const data = querySnapshot.docs[0].data();
+
+                    document.getElementById('ownHobbies').value = data.hobbies || '';
+                    document.getElementById('ownCurrentActivities').value = data.currentActivities || '';
+                    document.getElementById('ownIsInLove').value = data.isInLove || 'single';
+                    document.getElementById('ownAvailability').value = data.availability || 'medium';
+                    document.getElementById('ownJob').value = data.job || '';
+                    document.getElementById('ownLongTermGoals').value = data.longTermGoals || '';
+                    document.getElementById('ownDreamsAchieved').value = data.dreamsAchieved || '';
+                    document.getElementById('ownInvolvement').value = data.involvement || 5;
+                    document.getElementById('ownFitness').value = data.fitness || 5;
+                    document.getElementById('ownOriginality').value = data.originality || 5;
+                    document.getElementById('ownEgoism').value = data.egoism || 5;
+                    document.getElementById('ownIntelligence').value = data.intelligence || 5;
+                    document.getElementById('ownMusicTaste').value = data.musicTaste || '';
+
+                    updateAllOwnSliders();
+                    updateOwnDataSummary(data);
+                }
+            } catch (error) {
+                console.error('Error loading OwnData:', error);
+            }
+        }
+
+        // Save OwnData
+        window.saveOwnData = async function() {
+            const ownData = {
+                user: currentUser,
+                hobbies: document.getElementById('ownHobbies').value,
+                currentActivities: document.getElementById('ownCurrentActivities').value,
+                isInLove: document.getElementById('ownIsInLove').value,
+                availability: document.getElementById('ownAvailability').value,
+                job: document.getElementById('ownJob').value,
+                longTermGoals: document.getElementById('ownLongTermGoals').value,
+                dreamsAchieved: document.getElementById('ownDreamsAchieved').value,
+                involvement: parseInt(document.getElementById('ownInvolvement').value),
+                fitness: parseInt(document.getElementById('ownFitness').value),
+                originality: parseInt(document.getElementById('ownOriginality').value),
+                egoism: parseInt(document.getElementById('ownEgoism').value),
+                intelligence: parseInt(document.getElementById('ownIntelligence').value),
+                musicTaste: document.getElementById('ownMusicTaste').value,
+                updatedAt: new Date().toISOString()
+            };
+
+            try {
+                const q = query(collection(db, 'ownData'), where('user', '==', currentUser));
+                const querySnapshot = await getDocs(q);
+
+                if (querySnapshot.empty) {
+                    ownData.createdAt = new Date().toISOString();
+                    await addDoc(collection(db, 'ownData'), ownData);
+                } else {
+                    const docId = querySnapshot.docs[0].id;
+                    await updateDoc(doc(db, 'ownData', docId), ownData);
+                }
+
+                alert('Perfil guardado correctamente');
+                updateOwnDataSummary(ownData);
+            } catch (error) {
+                console.error('Error:', error);
+                alert('Error al guardar perfil: ' + error.message);
+            }
+        };
+
+        // Update OwnData summary
+        function updateOwnDataSummary(data) {
+            const avgScore = ((data.involvement + data.fitness + data.originality + data.intelligence) / 4).toFixed(1);
+
+            document.getElementById('ownDataSummary').innerHTML = `
+                <h3 style="color: #1e3c72; margin-bottom: 15px;">Resumen de tu Perfil</h3>
+                <div class="kpi-grid">
+                    <div class="kpi-item">
+                        <div class="kpi-label">Puntuación General</div>
+                        <div class="kpi-value">${avgScore}/10</div>
+                    </div>
+                    <div class="kpi-item">
+                        <div class="kpi-label">Social</div>
+                        <div class="kpi-value">${data.involvement}/10</div>
+                    </div>
+                    <div class="kpi-item">
+                        <div class="kpi-label">Fitness</div>
+                        <div class="kpi-value">${data.fitness}/10</div>
+                    </div>
+                    <div class="kpi-item">
+                        <div class="kpi-label">Inteligencia</div>
+                        <div class="kpi-value">${data.intelligence}/10</div>
+                    </div>
                 </div>
+                <p style="margin-top: 15px;"><strong>Estado:</strong> ${data.isInLove === 'single' ? 'Soltero/a' : data.isInLove === 'relationship' ? 'En relación' : data.isInLove}</p>
+                <p><strong>Disponibilidad:</strong> ${data.availability === 'high' ? 'Alta' : data.availability === 'medium' ? 'Media' : 'Baja'}</p>
+                ${data.job ? `<p><strong>Ocupación:</strong> ${data.job}</p>` : ''}
+                ${data.hobbies ? `<p><strong>Hobbies:</strong> ${data.hobbies}</p>` : ''}
             `;
+        }
+
+        // Update own slider
+        window.updateOwnSlider = function(name) {
+            const slider = document.getElementById('own' + name);
+            const display = document.getElementById('own' + name + 'Display');
+            display.textContent = slider.value;
+        };
+
+        function updateAllOwnSliders() {
+            ['Involvement', 'Fitness', 'Originality', 'Egoism', 'Intelligence'].forEach(name => {
+                updateOwnSlider(name);
+            });
         }
 
         // Count node events
@@ -1153,6 +1427,166 @@
             if (event.target.classList.contains('modal')) {
                 event.target.style.display = 'none';
             }
+        };
+
+        // Export functions
+        function escapeCSV(str) {
+            if (str === null || str === undefined) return '';
+            str = String(str);
+            if (str.includes(',') || str.includes('"') || str.includes('\n')) {
+                return '"' + str.replace(/"/g, '""') + '"';
+            }
+            return str;
+        }
+
+        function downloadFile(content, filename, type) {
+            const blob = new Blob([content], { type: type });
+            const link = document.createElement('a');
+            const url = URL.createObjectURL(blob);
+            link.setAttribute('href', url);
+            link.setAttribute('download', filename);
+            link.style.visibility = 'hidden';
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+        }
+
+        // Export nodes to CSV
+        window.exportNodes = function() {
+            if (allNodes.length === 0) {
+                alert('No hay nodos para exportar');
+                return;
+            }
+
+            const headers = [
+                'Nombre',
+                'Edad',
+                'Trabajo',
+                'Hobbies',
+                'Objetivos Largo Plazo',
+                'Está Enamorado',
+                'Tipo Relación',
+                'Valor Romántico',
+                'Valor Social',
+                'Nivel Confianza',
+                'Lugares',
+                'Highlights',
+                'Color',
+                'Fecha Creación'
+            ];
+
+            let csv = headers.join(',') + '\n';
+
+            allNodes.forEach(node => {
+                const row = [
+                    escapeCSV(node.name),
+                    node.age || '',
+                    escapeCSV(node.job),
+                    escapeCSV(node.hobbies),
+                    escapeCSV(node.longTermGoals),
+                    escapeCSV(node.isInLove),
+                    escapeCSV(node.relationType),
+                    node.romanticValue || 0,
+                    node.socialValue || 0,
+                    node.trustLevel || 0,
+                    escapeCSV(node.places),
+                    escapeCSV(node.highlights),
+                    node.color || '',
+                    escapeCSV(node.createdAt)
+                ];
+                csv += row.join(',') + '\n';
+            });
+
+            const filename = `nodes-${currentUser}-${new Date().toISOString().split('T')[0]}.csv`;
+            downloadFile(csv, filename, 'text/csv;charset=utf-8;');
+        };
+
+        // Export events to CSV
+        window.exportEvents = function() {
+            if (allEvents.length === 0) {
+                alert('No hay eventos para exportar');
+                return;
+            }
+
+            const headers = [
+                'Fecha',
+                'Hora',
+                'Lugar',
+                'Nodos',
+                'Clima',
+                'Outfit',
+                'Número Personas',
+                'Situación',
+                'Ambiente',
+                'Notas',
+                'Fecha Creación'
+            ];
+
+            let csv = headers.join(',') + '\n';
+
+            allEvents.forEach(evt => {
+                const nodeNames = evt.nodes ? evt.nodes.map(nid => {
+                    const node = allNodes.find(n => n.id === nid);
+                    return node ? node.name : 'Desconocido';
+                }).join('; ') : '';
+
+                const row = [
+                    escapeCSV(evt.date),
+                    escapeCSV(evt.time),
+                    escapeCSV(evt.place),
+                    escapeCSV(nodeNames),
+                    escapeCSV(evt.weather),
+                    escapeCSV(evt.outfit),
+                    evt.peopleCount || '',
+                    escapeCSV(evt.situation),
+                    escapeCSV(evt.environment),
+                    escapeCSV(evt.notes),
+                    escapeCSV(evt.createdAt)
+                ];
+                csv += row.join(',') + '\n';
+            });
+
+            const filename = `events-${currentUser}-${new Date().toISOString().split('T')[0]}.csv`;
+            downloadFile(csv, filename, 'text/csv;charset=utf-8;');
+        };
+
+        // Export all data to JSON
+        window.exportAllData = async function() {
+            if (allNodes.length === 0 && allEvents.length === 0) {
+                alert('No hay datos para exportar');
+                return;
+            }
+
+            // Load OwnData
+            let ownData = null;
+            try {
+                const q = query(collection(db, 'ownData'), where('user', '==', currentUser));
+                const querySnapshot = await getDocs(q);
+                if (!querySnapshot.empty) {
+                    ownData = querySnapshot.docs[0].data();
+                }
+            } catch (error) {
+                console.error('Error loading OwnData for export:', error);
+            }
+
+            const exportData = {
+                user: currentUser,
+                exportDate: new Date().toISOString(),
+                nodes: allNodes,
+                events: allEvents,
+                ownData: ownData,
+                stats: {
+                    totalNodes: allNodes.length,
+                    totalEvents: allEvents.length,
+                    avgRomanticValue: allNodes.length > 0 ? (allNodes.reduce((sum, n) => sum + (n.romanticValue || 0), 0) / allNodes.length).toFixed(2) : 0,
+                    avgSocialValue: allNodes.length > 0 ? (allNodes.reduce((sum, n) => sum + (n.socialValue || 0), 0) / allNodes.length).toFixed(2) : 0,
+                    avgTrustLevel: allNodes.length > 0 ? (allNodes.reduce((sum, n) => sum + (n.trustLevel || 0), 0) / allNodes.length).toFixed(2) : 0
+                }
+            };
+
+            const json = JSON.stringify(exportData, null, 2);
+            const filename = `social-graph-${currentUser}-${new Date().toISOString().split('T')[0]}.json`;
+            downloadFile(json, filename, 'application/json');
         };
     </script>
 </body>

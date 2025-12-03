@@ -1,130 +1,274 @@
-# Social Tracker
+# Social Graph Analyzer
 
-Una aplicación web basada en investigación psicológica para rastrear y mejorar tus interacciones sociales.
+Aplicación basada en teoría de grafos para analizar y optimizar tu red social mediante tracking de nodos (personas) y eventos.
 
-## 🎯 Descripción
+## 🎯 Concepto
 
-Social Tracker es una herramienta científicamente fundamentada para registrar tus interacciones sociales y analizar patrones que te ayuden a mejorar tu vida social. Utiliza metodologías validadas como el **Connection During Conversations Scale (CDCS)** y el **Evaluation of Social Systems (EVOS)** para medir múltiples dimensiones de calidad en tus interacciones.
+Social Graph Analyzer trata tu vida social como un grafo dirigido donde:
+- **Nodos** = Personas con atributos y valores heurísticos
+- **Eventos** = Interacciones que conectan nodos
+- **Análisis** = Identificación de patrones y zonas de alto valor
 
-## 🔬 Basado en Investigación Científica
+El objetivo es **optimizar tu red social** identificando:
+- Nodos de alto valor (romántico/social)
+- Zonas de "spawn" de nodos valiosos
+- Patrones de conexión exitosos
+- Evolución de relaciones a lo largo del tiempo
 
-Esta aplicación utiliza marcos de medición validados por investigación psicológica:
+## 🔬 Modelo de Datos
 
-- **Connection During Conversations Scale (CDCS)**: Mide la conexión experimentada durante interacciones sociales
-- **Evaluation of Social Systems (EVOS)**: Evalúa la calidad de relaciones en diferentes sistemas sociales
-- **Social Skills Improvement System**: Framework para el desarrollo de habilidades sociales
+### 📍 Nodos (Personas)
 
-## ✨ Características
+Cada nodo representa una persona con:
 
-### 📊 Medición Multidimensional
-- **Conexión / Shared Reality**: ¿Sentiste que estabais en la misma onda?
-- **Autenticidad**: ¿Pudiste ser tú mismo/a?
-- **Energía Social**: ¿Te sentiste energizado o agotado?
-- **Reciprocidad**: ¿Sintieron interés mutuo?
+**Atributos Básicos:**
+- Nombre, edad, trabajo
+- Hobbies
+- Objetivos a largo plazo
+- Color de identificación
 
-### 🎯 Tracking Completo
-- **👤 Dos usuarios**: Dani y Edu
-- **📅 Información básica**: Fecha, duración, lugar, tipo de interacción
-- **👥 Contexto social**: Personas presentes, outfit
-- **🎯 Objetivos**: Define y rastrea si cumples tus objetivos sociales
-- **😊 Estado emocional**: Mood antes y después de cada interacción
-- **📝 Reflexión**: ¿Qué funcionó? ¿Qué mejorar?
+**Estado Relacional:**
+- isInLove (sí/no/desconocido)
+- Tipo de relación (amigo, familia, pareja, conocido, profesional)
 
-### 📈 Análisis Avanzado
-- **Estadísticas detalladas**: Promedios de cada dimensión, tiempo social total
-- **Gráficas inteligentes**: Por tipo de interacción, lugar, outfit
-- **💡 Insights automáticos**:
-  - Mejor lugar para interacciones
-  - Mejor outfit basado en resultados
-  - Patrones de cambio de humor
-  - Análisis de niveles de energía
-  - Tipo de interacción más exitoso
+**Heurísticas & KPIs (0-10):**
+- **Valor Romántico**: Potencial como pareja
+- **Valor Social**: Potencial de networking/nuevos nodos
+- **Nivel de Confianza**: KPI de confiabilidad
 
-### 📅 Visualización
-- **Calendario interactivo**: Ve tus interacciones por fecha
-- **Lista detallada**: Todas las dimensiones y reflexiones
-- **Dashboard de estadísticas**: Métricas clave de un vistazo
+**Contexto:**
+- Lugares predecibles frecuentes
+- Highlights y notas importantes
 
-### 💾 Tecnología
-- **Firebase Firestore**: Almacenamiento en la nube seguro
-- **Single Page Application**: Todo en un archivo HTML
-- **Responsive Design**: Funciona en móvil y desktop
+### 📅 Eventos (Event Logs)
+
+Cada evento registra una interacción con:
+
+**Datos Temporales:**
+- Fecha y hora
+- Clima
+
+**Contexto Social:**
+- Nodos participantes (multi-selección)
+- Lugar
+- Número total de personas
+
+**Detalles:**
+- Outfit usado
+- Situación/Objetivo
+- Ambiente (ruido, iluminación, etc.)
+- Notas adicionales
+
+### 🔗 Relaciones
+
+Las relaciones entre nodos son **implícitas** a través de eventos compartidos. El sistema calcula automáticamente:
+- Frecuencia de interacción entre nodos
+- Lugares comunes
+- Contextos de encuentro
+
+## ✨ Funcionalidades
+
+### 👥 Gestión de Nodos
+
+- ➕ Crear nuevos nodos (personas)
+- ✏️ Editar atributos y KPIs
+- 🎨 Asignar colores para identificación visual
+- 🗑️ Eliminar nodos
+- 🏷️ Badges automáticos: High Romantic, High Social, High Trust
+
+### 📅 Event Logging
+
+- Registrar eventos con múltiples nodos
+- Tracking contextual (clima, outfit, ambiente)
+- Historial cronológico completo
+- Asociación automática nodo-evento
+
+### 🕸️ Visualización de Red
+
+- Estadísticas de red (nodos totales, eventos, ratio)
+- Mapa de conexiones (en desarrollo)
+- Vista de grafo interactiva (próximamente)
+
+### 📊 Analytics & KPIs
+
+**Dashboard General:**
+- Valor romántico promedio de tu red
+- Valor social promedio
+- Nivel de confianza promedio
+- Total de nodos
+
+**Rankings:**
+- Top 5 nodos románticos
+- Top 5 nodos sociales
+- Top 5 nodos de confianza
+
+**Análisis Individual:**
+- Eventos por nodo
+- Evolución temporal
+- Lugares frecuentes
+
+### 🎯 High-Value Spawn Zones
+
+**Análisis de zonas donde aparecen nodos de alto valor:**
+
+- Identificación de lugares con alta densidad de nodos valiosos
+- **Spawn Rate**: Nodos únicos / Eventos totales
+- **High-Value Count**: Nodos con romántico≥7 o social≥7
+- Ranking de mejores lugares para networking
+
+**Métricas por Zona:**
+- High-Value Nodes count
+- Total eventos en el lugar
+- Nodos únicos encontrados
+- Spawn rate (eficiencia del lugar)
+
+### ⚙️ OwnData (Mi Perfil)
+
+**Sistema completo de perfil personal:**
+
+**Información Personal:**
+- Hobbies actuales
+- Actividades actuales
+- Estado sentimental
+- Disponibilidad social
+- Trabajo/Estudios
+- Objetivos a largo plazo
+- Sueños alcanzados
+
+**Auto-Evaluación (1-10):**
+- Nivel de involucramiento social
+- Nivel de fitness
+- Nivel de originalidad
+- Nivel de egoísmo (auto-honestidad)
+- Nivel de inteligencia
+- Gusto musical
+
+**Resumen automático:**
+- Puntuación general calculada
+- Estado actual consolidado
+- Recomendaciones basadas en tu perfil
+
+### 📥 Exportación de Datos
+
+**Formatos disponibles:**
+- **CSV de Nodos**: Exporta todos tus contactos con sus KPIs
+- **CSV de Eventos**: Exporta todos los event logs
+- **JSON Completo**: Exporta todo (nodos + eventos + perfil + estadísticas)
+
+## 🛠️ Tecnología
+
+- **Frontend**: HTML5, CSS3, JavaScript ES6+, Canvas API
+- **Backend**: Firebase Firestore
+- **Modelo**: Teoría de Grafos
+- **Arquitectura**: Single Page Application (SPA)
+- **Storage**: Cloud Firestore (3 colecciones: `nodes`, `events`, `ownData`)
+- **Export**: CSV y JSON nativo
+
+## ⚙️ Configuración de Firebase
+
+**IMPORTANTE**: Antes de usar la aplicación, configura las reglas de Firestore:
+
+1. Ve a [Firebase Console](https://console.firebase.google.com/project/farmeo-dbd64/firestore/rules)
+2. Configura las siguientes reglas:
+
+```javascript
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    match /nodes/{document=**} {
+      allow read, write: if true;
+    }
+
+    match /events/{document=**} {
+      allow read, write: if true;
+    }
+
+    match /ownData/{document=**} {
+      allow read, write: if true;
+    }
+  }
+}
+```
+
+3. Click en **"Publicar"**
 
 ## 🚀 Uso
 
-1. Visita la aplicación en GitHub Pages: [https://edurobrus.github.io/social/](https://edurobrus.github.io/social/)
+1. Visita: [https://edurobrus.github.io/social/](https://edurobrus.github.io/social/)
 2. Selecciona tu usuario (Dani o Edu)
-3. Comienza a registrar tus interacciones
-4. Revisa el calendario, lista y estadísticas para analizar tus patrones sociales
+3. **Configura tu perfil** en la pestaña "Mi Perfil"
+4. **Crea nodos** para las personas en tu red
+5. **Registra eventos** cuando interactúas con ellas
+6. **Visualiza la red** en el grafo interactivo
+7. **Analiza patrones** en Analytics y Spawn Zones
+8. **Exporta tus datos** cuando lo necesites
 
-## 🛠️ Tecnologías
+## 📊 Flujo de Trabajo Recomendado
 
-- HTML5
-- CSS3
-- JavaScript (ES6+)
-- Firebase Firestore
+### 1. Setup Inicial
+1. Crear nodos para todas las personas importantes en tu vida
+2. Asignar valores heurísticos iniciales (romántico, social, confianza)
+3. Anotar lugares predecibles donde las encuentras
 
-## 📦 Instalación local
+### 2. Tracking Continuo
+1. Después de cada interacción social, registrar un evento
+2. Seleccionar todos los nodos que participaron
+3. Anotar contexto (outfit, lugar, clima, objetivo)
 
-```bash
-git clone https://github.com/edurobrus/social.git
-cd social
-# Abre index.html en tu navegador
-```
+### 3. Análisis Periódico
+1. Revisar Analytics semanalmente
+2. Identificar qué nodos están generando más valor
+3. Analizar spawn zones para optimizar dónde pasas tiempo
+4. Ajustar KPIs de nodos según nuevas interacciones
 
-## 🚀 Despliegue
+### 4. Optimización
+1. Frecuentar spawn zones de alto valor
+2. Invertir más tiempo en nodos de alta confianza/valor
+3. Experimentar con nuevos contextos y lugares
+4. Tracking de evolución temporal
 
-### Despliegue Automático con GitHub Actions
+## 🎯 Casos de Uso
 
-El proyecto incluye un workflow de GitHub Actions que despliega automáticamente a GitHub Pages:
+### Dating/Romance
+- Identificar nodos con alto potencial romántico
+- Encontrar spawn zones donde conocer gente interesante
+- Analizar qué contextos funcionan mejor (outfits, lugares, situaciones)
 
-- **Automático**: Cada push a la rama `main` despliega automáticamente
-- **Manual**: También puedes ejecutar el workflow manualmente desde la pestaña "Actions" en GitHub
+### Networking Profesional
+- Mapear tu red profesional
+- Identificar conectores (alto valor social)
+- Encontrar eventos/lugares para ampliar red
 
-### Configuración inicial de GitHub Pages:
+### Análisis Social
+- Entender tu red de amistades
+- Identificar relaciones de alta confianza
+- Optimizar tiempo social en personas que aportan valor
 
-1. Ve a tu repositorio en GitHub
-2. Click en **Settings** > **Pages**
-3. En **Source**, selecciona **GitHub Actions**
-4. El workflow se ejecutará automáticamente en el próximo push
+### Self-Improvement
+- Tracking de evolución de relaciones
+- Identificar patrones exitosos
+- Mejorar habilidades sociales basado en datos
 
-La aplicación estará disponible en: `https://edurobrus.github.io/social/`
+## 🔮 Roadmap
 
-## 🎨 Objetivo
+### ✅ Completado
+- [x] Visualización interactiva de grafo con Canvas
+- [x] Exportación de datos (CSV/JSON)
+- [x] OwnData completo con auto-análisis
+- [x] Sistema de badges automático
+- [x] Análisis de spawn zones
 
-El objetivo es ayudarte a mejorar sistemáticamente tus habilidades sociales mediante:
-
-### 📊 Medición Científica
-- Utilizar escalas validadas para evaluar la calidad de tus interacciones
-- Medir múltiples dimensiones (conexión, autenticidad, energía, reciprocidad)
-- Rastrear cambios emocionales antes y después de interacciones
-
-### 🔍 Identificación de Patrones
-- Descubrir qué lugares generan mejores interacciones
-- Identificar patrones de vestimenta que correlacionan con éxito social
-- Analizar qué tipos de interacciones te energizan vs. agotan
-- Determinar en qué contextos te sientes más auténtico
-
-### 📈 Mejora Continua
-- Establecer objetivos claros para cada interacción
-- Reflexionar sobre qué funciona y qué mejorar
-- Ver tu evolución a lo largo del tiempo
-- Recibir insights automáticos basados en tus datos
-- Tomar decisiones informadas sobre tu vida social
-
-### 🎯 Aplicación Práctica
-- Maximizar interacciones positivas
-- Minimizar situaciones que te agotan
-- Optimizar tu contexto social (lugares, personas, timing)
-- Desarrollar autenticidad en tus relaciones
-
-## 📚 Referencias Científicas
-
-Esta aplicación está basada en investigación psicológica validada:
-
-- **Connection During Conversations Scale (CDCS)**: [Measuring social connection in specific interactions](https://journals.plos.org/plosone/article?id=10.1371/journal.pone.0286408)
-- **Evaluation of Social Systems (EVOS)**: [Measuring social relationships across different systems](https://journals.plos.org/plosone/article?id=10.1371/journal.pone.0133442)
-- **Social Skills Improvement System**: [Framework for social skills development](https://www.toolshero.com/psychology/social-skills-improvement-system/)
+### 🚧 En Desarrollo
+- [ ] Visualización más avanzada con D3.js o vis.js (drag & drop)
+- [ ] Análisis de caminos entre nodos (shortest path)
+- [ ] Detección de clusters/comunidades (algoritmo Louvain)
+- [ ] Predicción de compatibilidad entre nodos (ML)
+- [ ] Timeline/evolución temporal de KPIs
+- [ ] Heatmap de actividad social por día/hora
+- [ ] Sugerencias automáticas basadas en patrones
+- [ ] Import de datos (CSV/JSON)
+- [ ] Modo oscuro
+- [ ] Mobile app (PWA)
 
 ## 📄 Licencia
 
@@ -132,4 +276,4 @@ Proyecto personal de código abierto
 
 ---
 
-**Nota**: Esta es una herramienta de auto-seguimiento personal. No reemplaza terapia profesional ni diagnóstico clínico. Si experimentas dificultades significativas en tus relaciones sociales, considera consultar con un profesional de salud mental.
+**Nota**: Esta herramienta es para análisis y optimización personal. Respeta la privacidad de las personas en tu red y usa los datos responsablemente.
